@@ -11,7 +11,7 @@ final ThemeData darkTheme = ThemeData(
   colorScheme: const ColorScheme.dark(
     primary: AppColors.primaryVariant1,
     secondary: AppColors.secondary,
-    background: AppColors.darkBackground,
+    surfaceContainer: AppColors.darkBackground,
     surface: AppColors.darkSurface,
   ),
   textTheme: TTextTheme.darkTextTheme,

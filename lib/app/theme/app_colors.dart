@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Brown primary palette
+  // Brown primary palette - Light mode
   static const Color primary = Color(0xFF8B5E3C);
   static const Color primaryVariant1 = Color(0xFFA97457);
   static const Color secondary = Color(0xFFDB7134);
+
+  // Brown primary palette - Dark mode
+  static const Color darkPrimary = Color(
+    0xFFD2BBA0,
+  ); // Muted beige/brown (light text on dark bg)
+  static const Color darkPrimaryVariant1 = Color(
+    0xFFB99877,
+  ); // Slightly darker beige
+  static const Color darkSecondary = Color(0xFFE59A65); // Warm orange accent
 
   // Light theme neutrals
   static const Color lightBackground = Color(0xFFF5F2EF);
@@ -22,6 +31,4 @@ class AppColors {
   static const Color success = Color(0xFF4CAF50);
   static const Color warning = Color(0xFFFFC107);
   static const Color error = Color(0xFFD32F2F);
-
 }
-

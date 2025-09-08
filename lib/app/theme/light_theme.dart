@@ -12,7 +12,7 @@ final ThemeData lightTheme = ThemeData(
     primary: AppColors.primary,
     secondary: AppColors.secondary,
     background: AppColors.lightBackground,
-    surface: AppColors.lightSurface
+    surface: AppColors.secondary,
   ),
   textTheme: TTextTheme.lightTextTheme,
   textButtonTheme: TTextButtonTheme.lightTextButtonTheme,

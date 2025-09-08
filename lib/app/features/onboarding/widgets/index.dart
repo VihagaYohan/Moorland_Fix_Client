@@ -1,0 +1,1 @@
+export 'package:moorland_fix/app/features/onboarding/widgets/page_item.dart';
