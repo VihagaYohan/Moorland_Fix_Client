@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 // custom themes
-import 'package:moorland_fix/app/theme/custom_themes/text_theme.dart';
+import 'package:moorland_fix/app/theme/custom_themes/index.dart';
 
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -14,5 +14,6 @@ final ThemeData lightTheme = ThemeData(
     background: AppColors.lightBackground,
     surface: AppColors.lightSurface
   ),
-  textTheme: TTextTheme.lightTextTheme
+  textTheme: TTextTheme.lightTextTheme,
+  textButtonTheme: TTextButtonTheme.lightTextButtonTheme,
 );
