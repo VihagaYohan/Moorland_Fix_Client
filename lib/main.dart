@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+// theme
+import 'package:moorland_fix/app/theme/light_theme.dart';
+import 'package:moorland_fix/app/theme/dark_theme.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -12,9 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       home: const MyHomePage(title: 'This is Flutter'),
     );
   }
