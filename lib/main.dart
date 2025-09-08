@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:moorland_fix/app/features/onboarding/presentation/onboarding_page.dart';
+import 'package:moorland_fix/app/routes/app_navigator.dart';
+
+// routes
+import 'package:moorland_fix/app/routes/routes.dart';
 
 // theme
 import 'package:moorland_fix/app/theme/index.dart';
@@ -15,9 +19,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: "Moorland Fix",
       theme: lightTheme,
       darkTheme: darkTheme,
+      routes: AppNavigator.routes,
       home: const OnboardingPage()
     );
   }

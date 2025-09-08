@@ -6,6 +6,9 @@ import 'package:moorland_fix/app/shared/index.dart';
 // data
 import '../data/onboarding_items.dart';
 
+// routes
+import 'package:moorland_fix/app/routes/index.dart';
+
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
 
@@ -51,7 +54,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             currentIndex == OnboardingItems.length - 1 ? "Get Started" : "Next",
         onPressed: () {
           if (currentIndex == OnboardingItems.length - 1) {
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushReplacementNamed(context, Routes.login);
           } else {
             _pageController.nextPage(
                 duration: const Duration(milliseconds: 300),
