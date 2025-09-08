@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
+// custom themes
+import 'package:moorland_fix/app/theme/custom_themes/text_theme.dart';
+
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: AppColors.primary,
@@ -11,8 +14,5 @@ final ThemeData lightTheme = ThemeData(
     background: AppColors.lightBackground,
     surface: AppColors.lightSurface
   ),
-  textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: AppColors.lightTextPrimary),
-    bodyMedium: TextStyle(color: AppColors.lightTextSecondary)
-  ),
+  textTheme: TTextTheme.lightTextTheme
 );
