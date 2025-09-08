@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 // custom themes
-import 'package:moorland_fix/app/theme/custom_themes/text_theme.dart';
+import 'package:moorland_fix/app/theme/custom_themes/index.dart';
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
@@ -15,4 +15,5 @@ final ThemeData darkTheme = ThemeData(
     surface: AppColors.darkSurface,
   ),
   textTheme: TTextTheme.darkTextTheme,
+  textButtonTheme: TTextButtonTheme.darkTextButtonTheme
 );
