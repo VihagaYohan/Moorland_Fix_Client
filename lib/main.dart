@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:moorland_fix/app/features/onboarding/presentation/onboarding_page.dart';
 import 'package:moorland_fix/app/routes/app_navigator.dart';
 
-// routes
-import 'package:moorland_fix/app/routes/routes.dart';
+// pages
+import 'package:moorland_fix/app/features/index.dart';
 
 // theme
 import 'package:moorland_fix/app/theme/index.dart';
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       routes: AppNavigator.routes,
-      home: const OnboardingPage()
+      home: const HomePage()
     );
   }
 }
