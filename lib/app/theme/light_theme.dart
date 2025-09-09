@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moorland_fix/app/theme/custom_themes/bottom_navigation_theme.dart';
 import 'app_colors.dart';
 
 // custom themes
@@ -16,4 +17,8 @@ final ThemeData lightTheme = ThemeData(
   ),
   textTheme: TTextTheme.lightTextTheme,
   textButtonTheme: TTextButtonTheme.lightTextButtonTheme,
+  navigationBarTheme: TBottomNavigationTheme.lightBottomNavigationTheme,
+  navigationRailTheme: TNavigationRail.lightNavigationRail,
+  navigationDrawerTheme: TNavigationDrawer.lightNavigationDrawer,
+  dividerTheme: TDividerTheme.lightDividerTheme
 );
