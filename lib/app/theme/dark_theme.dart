@@ -16,5 +16,6 @@ final ThemeData darkTheme = ThemeData(
   ),
   textTheme: TTextTheme.darkTextTheme,
   textButtonTheme: TTextButtonTheme.darkTextButtonTheme,
-  navigationBarTheme: TBottomNavigationTheme.darkBottomNavigationTheme
+  navigationBarTheme: TBottomNavigationTheme.darkBottomNavigationTheme,
+  navigationRailTheme: TNavigationRail.darkNavigationRail
 );

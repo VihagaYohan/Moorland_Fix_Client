@@ -18,4 +18,5 @@ final ThemeData lightTheme = ThemeData(
   textTheme: TTextTheme.lightTextTheme,
   textButtonTheme: TTextButtonTheme.lightTextButtonTheme,
   navigationBarTheme: TBottomNavigationTheme.lightBottomNavigationTheme,
+  navigationRailTheme: TNavigationRail.lightNavigationRail
 );
