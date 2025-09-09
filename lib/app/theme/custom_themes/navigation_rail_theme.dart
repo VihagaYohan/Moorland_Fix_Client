@@ -15,7 +15,7 @@ class TNavigationRail {
   );
 
   static var darkNavigationRail = NavigationRailThemeData(
-    backgroundColor: AppColors.darkSurface,
+    backgroundColor: AppColors.darkBackground,
     selectedLabelTextStyle: TextStyle(color: AppColors.primary),
     unselectedLabelTextStyle: TextStyle(color: Colors.grey),
     selectedIconTheme: IconThemeData(color: AppColors.primary),
