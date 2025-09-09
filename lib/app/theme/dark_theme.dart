@@ -15,5 +15,6 @@ final ThemeData darkTheme = ThemeData(
     surface: AppColors.darkSurface,
   ),
   textTheme: TTextTheme.darkTextTheme,
-  textButtonTheme: TTextButtonTheme.darkTextButtonTheme
+  textButtonTheme: TTextButtonTheme.darkTextButtonTheme,
+  navigationBarTheme: TBottomNavigationTheme.darkBottomNavigationTheme
 );
