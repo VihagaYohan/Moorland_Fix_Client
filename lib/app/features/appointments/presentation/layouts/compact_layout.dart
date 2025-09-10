@@ -6,6 +6,9 @@ import 'package:moorland_fix/app/theme/index.dart';
 // shared
 import 'package:moorland_fix/app/shared/index.dart';
 
+// flavors
+import 'package:moorland_fix/app/flavors/flavor_config.dart';
+
 class CompactLayout extends StatefulWidget {
   const CompactLayout({super.key});
 
@@ -20,11 +23,15 @@ class _CompactLayoutState extends State<CompactLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          color: AppColors.primary.withValues(alpha: 0.15),
-          width: 100,
-          height:100,
-        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text("Appointment page"),
+            Text('App - ${FlavorConfig.instance.name}')
+
+          ],
+        )
       ),
     );
   }
