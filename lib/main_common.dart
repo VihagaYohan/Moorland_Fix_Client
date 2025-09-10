@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:moorland_fix/app/routes/app_navigator.dart';
-
 // pages
 import 'package:moorland_fix/app/features/index.dart';
-
+// flavors
+import 'package:moorland_fix/app/flavors/flavor_config.dart';
+// routes
+import 'package:moorland_fix/app/routes/app_navigator.dart';
 // theme
 import 'package:moorland_fix/app/theme/index.dart';
+// app entry point
+import 'package:moorland_fix/flutter_app.dart';
 
-void main() {
-  runApp(const MyApp());
+void mainCommon({
+  required Flavor flavor,
+  required String baseUrl,
+  required String name,
+}) {
+  FlavorConfig(flavor: flavor, baseUrl: baseUrl, name: name);
+  runApp(const MoorlandApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -22,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       routes: AppNavigator.routes,
-      home: const HomePage()
+      home: const HomePage(),
     );
   }
 }
