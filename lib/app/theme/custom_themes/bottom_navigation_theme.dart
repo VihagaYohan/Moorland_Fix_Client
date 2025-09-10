@@ -18,8 +18,8 @@ class TBottomNavigationTheme {
 
   static var darkBottomNavigationTheme =  NavigationBarThemeData(
     surfaceTintColor: AppColors.darkSurface,
-    backgroundColor: AppColors.darkBackground,
-    indicatorColor: AppColors.primary.withValues(alpha: 0.15),
+      backgroundColor: AppColors.darkBackground,
+      indicatorColor: AppColors.primary.withValues(alpha: 0.15),
     labelTextStyle: WidgetStateProperty.all(
       const TextStyle(
         color: AppColors.primary
