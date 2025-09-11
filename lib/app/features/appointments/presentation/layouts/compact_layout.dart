@@ -28,8 +28,7 @@ class _CompactLayoutState extends State<CompactLayout> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text("Appointment page"),
-            Text('App - ${FlavorConfig.instance.name}')
-
+            Text('App - ${FlavorConfig.instance.name}'),
           ],
         )
       ),
