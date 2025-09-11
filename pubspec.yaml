@@ -21,6 +21,12 @@ version: 1.0.0+1
 environment:
   sdk: ^3.7.2
 
+# Scripts
+scripts:
+  env:
+      dev: "flutter run --flavor dev -t lib/app/env/main_dev.dart"
+      prod: "flutter run --flavor dev -t lib/app/env/main_prod.dart"
+
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
