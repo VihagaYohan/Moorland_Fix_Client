@@ -1,4 +1,4 @@
-package com.example.moorland_fix
+package com.moorland.moorland_fix
 
 import io.flutter.embedding.android.FlutterActivity
 
