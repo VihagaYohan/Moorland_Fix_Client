@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "341211390923",
+    "project_id": "moorlandfix-dev",
+    "storage_bucket": "moorlandfix-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341211390923:android:12ff9feef872cd301a0c4e",
+        "android_client_info": {
+          "package_name": "com.moorland.moorlandfix.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz3iukAi5tagClngoMnMzbzzN_AqJQfkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
