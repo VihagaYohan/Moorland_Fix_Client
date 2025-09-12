@@ -1,5 +1,8 @@
 export 'package:moorland_fix/app/shared/constants.dart';
 
+// services
+import 'package:moorland_fix/app/shared/services/index.dart';
+
 // constants
 export 'package:moorland_fix/app/shared/constants.dart';
 

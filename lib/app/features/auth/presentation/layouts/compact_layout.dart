@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:moorland_fix/app/shared/index.dart';
 
 // widget
-import 'package:moorland_fix/app/features/auth/widgets/index.dart';
+import 'package:moorland_fix/app/features/auth/presentation/widgets/index.dart';
 
 class CompactLayout extends StatefulWidget {
   const CompactLayout({super.key});
