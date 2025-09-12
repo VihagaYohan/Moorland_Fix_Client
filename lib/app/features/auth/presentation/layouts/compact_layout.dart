@@ -104,6 +104,13 @@ class _CompactLayoutState extends State<CompactLayout> {
               ),
             ],
           ),
+          const SizedBox(height: Constants.spaceSmall),
+          Text(
+            "© 2025 Moorland Fix. All rights reserved.",
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+              fontSize: 12
+            ),
+          ),
         ],
       ),
     );
