@@ -1,0 +1,1 @@
+export 'package:moorland_fix/app/features/auth/presentation/widgets/footer.dart';

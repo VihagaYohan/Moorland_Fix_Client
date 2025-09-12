@@ -19,7 +19,7 @@ class MoorlandApp extends StatelessWidget {
         theme: lightTheme,
         darkTheme: darkTheme,
         routes: AppNavigator.routes,
-        home: const HomePage()
+        home: const LoginPage()
     );
   }
 }
