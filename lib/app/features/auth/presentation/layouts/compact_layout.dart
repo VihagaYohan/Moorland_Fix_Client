@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 // shared
 import 'package:moorland_fix/app/shared/index.dart';
-
 // theme
 import 'package:moorland_fix/app/theme/index.dart';
 
@@ -29,51 +27,84 @@ class _CompactLayoutState extends State<CompactLayout> {
                   textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(
-                  height: Constants.spaceSmall,
-                ),
+                const SizedBox(height: Constants.spaceSmall),
 
                 // tag line
                 Text(
-                    "Quick solutions, Trusted experts",
-                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey,
-                        letterSpacing: 1.5
-                    )
+                  "Quick solutions, Trusted experts",
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.grey,
+                    letterSpacing: 1.5,
+                  ),
                 ),
 
-                const SizedBox(
-                    height: Constants.spaceLarge * 2
-                ),
+                const SizedBox(height: Constants.spaceLarge * 2),
 
                 // image container
-                Container(
-                  width: 200,
-                  height: 200,
-                  color: Colors.red,
-                ),
+                Container(width: 200, height: 200, color: Colors.red),
 
-                const SizedBox(
-                    height: Constants.spaceLarge * 2
-                ),
+                const SizedBox(height: Constants.spaceLarge * 2),
 
                 // sign-in button
                 SizedBox(
                   width: double.infinity,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Constants.spaceMedium),
-                    child: UIFilledButton(
-                      label: 'Sign In',
-                      onPressed: (){},
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Constants.spaceMedium,
                     ),
+                    child: UIFilledButton(label: 'Sign In', onPressed: () {}),
                   ),
-                )
+                ),
               ],
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: footer(context),
+    );
+  }
+
+  // footer
+  Widget footer(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: Constants.spaceLarge),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            "By continuing, you agree to our",
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: "Terms",
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(text: " and ",
+                    style: Theme.of(context).textTheme.bodySmall),
+                    TextSpan(
+                      text: "Privacy Policy",
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
