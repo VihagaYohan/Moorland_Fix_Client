@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-// shared
-import 'package:moorland_fix/app/shared/index.dart';
-
+import 'package:moorland_fix/app/features/auth/presentation/provider/auth_provider.dart';
 // widget
 import 'package:moorland_fix/app/features/auth/presentation/widgets/index.dart';
+import 'package:moorland_fix/app/features/home/presentation/root_home_page.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../shared/constants.dart';
+import '../../../../shared/widgets/buttons/ui_filled_button.dart';
 
 class CompactLayout extends StatefulWidget {
   const CompactLayout({super.key});
@@ -13,57 +16,118 @@ class CompactLayout extends StatefulWidget {
 }
 
 class _CompactLayoutState extends State<CompactLayout> {
+  // handle authentication
+  handleAuthentication(AuthProvider authProvider, BuildContext context) async {
+    var result = await authProvider.signInWithGoogle();
+    if (result.isSuccess) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      print(result.error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Footer(),
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                // title
-                Text(
-                  "Moorland Fix",
-                  style: Theme.of(context).textTheme.displayLarge,
-                  textAlign: TextAlign.center,
-                ),
-
-                const SizedBox(height: Constants.spaceSmall),
-
-                // tag line
-                Text(
-                  "Quick solutions, Trusted experts",
-                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.grey,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-
-                const SizedBox(height: Constants.spaceLarge * 2),
-
-                // image container
-                Container(width: 200, height: 200, color: Colors.red),
-
-                const SizedBox(height: Constants.spaceLarge * 2),
-
-                // sign-in button
+          child: Consumer<AuthProvider>(
+            builder: (context, authProvider, child) {
+              if (authProvider.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (authProvider.getError != null) {
+                return Center(child: Text(authProvider.getError.toString()));
+              } else {
+                return // sign-in button
                 SizedBox(
                   width: double.infinity,
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: Constants.spaceMedium,
                     ),
-                    child: UIFilledButton(label: 'Sign In', onPressed: () {}),
+                    child: UIFilledButton(
+                      label: 'Sign In',
+                      onPressed: () {
+                        handleAuthentication(authProvider, context);
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
+                );
+              }
+            },
           ),
         ),
       ),
-      bottomNavigationBar: Footer(),
     );
+
+    /*return Scaffold(
+      bottomNavigationBar: Footer(),
+      body: SafeArea(
+        child: Center(
+          child: Consumer<AuthProvider>(
+            builder: (context, authProvider, child) {
+              if (authProvider.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      // title
+                      Text(
+                        "Moorland Fix",
+                        style: Theme.of(context).textTheme.displayLarge,
+                        textAlign: TextAlign.center,
+                      ),
+
+                      const SizedBox(height: Constants.spaceSmall),
+
+                      // tag line
+                      Text(
+                        "Quick solutions, Trusted experts",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.headlineSmall!.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.grey,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+
+                      const SizedBox(height: Constants.spaceLarge * 2),
+
+                      // image container
+                      Container(width: 200, height: 200, color: Colors.red),
+
+                      const SizedBox(height: Constants.spaceLarge * 2),
+
+                      // sign-in button
+                      SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Constants.spaceMedium,
+                          ),
+                          child: UIFilledButton(
+                            label: 'Sign In',
+                            onPressed: () {
+                              authProvider.signInWithGoogle();
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
+        ),
+      ),
+    );*/
   }
 }

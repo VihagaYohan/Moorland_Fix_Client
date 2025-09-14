@@ -4,8 +4,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:moorland_fix/app/features/auth/data/data_sources/auth_remote_access_impl.dart';
 import 'package:moorland_fix/app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:moorland_fix/app/features/auth/domain/usecases/_index.dart';
+import 'package:moorland_fix/app/features/auth/presentation/provider/auth_provider.dart';
 // services
 import 'package:moorland_fix/app/shared/services/index.dart';
+
+import '../features/auth/data/repositoryImpl/auth_repositoryImpl.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -22,6 +25,15 @@ Future<void> init({required FirebaseOptions firebaseOptions}) async {
 
   getIt.registerLazySingleton<AuthRemoteImpl>(
     () => AuthRemoteImpl(googleSignIn: getIt()),
+  );
+
+  getIt.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(getIt<AuthRemoteImpl>()),
+  );
+
+  // providers
+  getIt.registerLazySingleton<AuthProvider>(
+    () => AuthProvider(signInWithGoogle: getIt()),
   );
 
   // usecases
