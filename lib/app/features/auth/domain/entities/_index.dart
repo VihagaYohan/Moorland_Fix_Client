@@ -1,0 +1,1 @@
+export 'package:moorland_fix/app/features/auth/domain/entities/user_entity.dart';

@@ -18,3 +18,6 @@ export 'package:moorland_fix/app/shared/widgets/ui_responsive_layout.dart';
 // utils
 export 'package:moorland_fix/app/shared/utils/device_utility.dart';
 export 'package:moorland_fix/app/shared/utils/breakpoints.dart';
+
+// result
+export 'package:moorland_fix/app/shared/result.dart';
