@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moorland_fix/app/features/appointments/presentation/root_appointments_page.dart';
+import 'package:moorland_fix/app/features/appointments/presentation/widgets/new_appointment.dart';
 import 'package:moorland_fix/app/features/profile/presentation/root_profile_page.dart';
 
 // theme
@@ -43,7 +44,7 @@ class _CompactLayoutState extends State<CompactLayout> {
           ),
         ],
       ),
-      body: const [AppointmentsPage(), ProfilePage()][currentPageIndex],
+      body: const [AppointmentsPage(), NewAppointment()][currentPageIndex],
     );
   }
 }

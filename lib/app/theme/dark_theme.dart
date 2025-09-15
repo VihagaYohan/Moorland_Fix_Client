@@ -20,4 +20,5 @@ final ThemeData darkTheme = ThemeData(
   navigationRailTheme: TNavigationRail.darkNavigationRail,
   navigationDrawerTheme: TNavigationDrawer.darkNavigationDrawer,
   dividerTheme: TDividerTheme.darkDividerTheme,
+  inputDecorationTheme: TTextFieldTheme.darkInputDecorationTheme
 );

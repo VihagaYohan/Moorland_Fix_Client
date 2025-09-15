@@ -6,19 +6,21 @@ import 'app_colors.dart';
 import 'package:moorland_fix/app/theme/custom_themes/index.dart';
 
 final ThemeData lightTheme = ThemeData(
+  useMaterial3: true,
   brightness: Brightness.light,
   primaryColor: AppColors.primary,
   scaffoldBackgroundColor: AppColors.lightBackground,
   colorScheme: const ColorScheme.light(
     primary: AppColors.primary,
     secondary: AppColors.secondary,
-    background: AppColors.lightBackground,
-    surface: AppColors.secondary,
+    //background: AppColors.lightBackground,
+    //surface: AppColors.secondary,
   ),
   textTheme: TTextTheme.lightTextTheme,
   textButtonTheme: TTextButtonTheme.lightTextButtonTheme,
   navigationBarTheme: TBottomNavigationTheme.lightBottomNavigationTheme,
   navigationRailTheme: TNavigationRail.lightNavigationRail,
   navigationDrawerTheme: TNavigationDrawer.lightNavigationDrawer,
-  dividerTheme: TDividerTheme.lightDividerTheme
+  dividerTheme: TDividerTheme.lightDividerTheme,
+  inputDecorationTheme: TTextFieldTheme.lightTextFieldTheme,
 );
