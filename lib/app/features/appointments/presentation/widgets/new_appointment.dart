@@ -17,6 +17,40 @@ class TimeSlot {
   }
 }
 
+class Services {
+  final String _id;
+  final String name;
+  final int slotsPerDay;
+  final bool wholeDayBooking;
+  final String description;
+  List<TimeSlot>? timeSlots;
+
+  Services(
+    this._id,
+    this.name,
+    this.slotsPerDay,
+    this.wholeDayBooking,
+    this.description, {
+    this.timeSlots,
+  }) {
+    if (wholeDayBooking == false) {
+      timeSlots = commonTimeSlots;
+    } else {
+      timeSlots = wholeDaySlot;
+    }
+  }
+
+  static final List<TimeSlot> commonTimeSlots = [
+    TimeSlot("08:00", "11:00", "morning", "1"),
+    TimeSlot("11:00", "14:00", "afternoon", "2"),
+    TimeSlot("14:00", "17:00", "evening", "3"),
+  ];
+
+  static final List<TimeSlot> wholeDaySlot = [
+    TimeSlot("08:00", "05:00", "whole day", "1"),
+  ];
+}
+
 class NewAppointment extends StatefulWidget {
   const NewAppointment({super.key});
 
@@ -25,10 +59,15 @@ class NewAppointment extends StatefulWidget {
 }
 
 class _NewAppointmentState extends State<NewAppointment> {
+  // form key
   final _formKey = GlobalKey<FormState>();
+
+  // states
+  late List<TimeSlot> _availableSlots;
 
   // controllers
   final TextEditingController notesController = TextEditingController(text: "");
+  final TextEditingController dateController = TextEditingController(text: "");
 
   void showAlert() {
     DeviceUtils.showAlertDialog(
@@ -44,6 +83,35 @@ class _NewAppointmentState extends State<NewAppointment> {
     TimeSlot("08:00", "11:00", "morning", "1"),
     TimeSlot("11:00", "14:00", 'afternoon', "2"),
     TimeSlot("14:00", "17:00", 'evening', "3"),
+  ];
+
+  final List<TimeSlot> availableTimeSlots = [
+    TimeSlot("08:00", "11:00", "morning", "1"),
+  ];
+
+  final List<Services> services = [
+    Services(
+      "1",
+      "Electrical",
+      4,
+      false,
+      "Wiring, outlet installation, lighting, electrical repair",
+    ),
+    Services(
+      "2",
+      "General Handyman",
+      4,
+      false,
+      "Various home repairs and maintenance tasks",
+    ),
+    Services(
+      "3",
+      "Gardening",
+      3,
+      false,
+      "Lawn care, planting, landscaping, tree trimming",
+    ),
+    Services("4", "Painting", 1, true, "Interior and exterior painting"),
   ];
 
   @override
@@ -72,7 +140,57 @@ class _NewAppointmentState extends State<NewAppointment> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
-                      // form fields container
+                      SizedBox(height: Constants.spaceLarge),
+
+                      // services
+                      UIDropDown(
+                        items: services,
+                        hintText: "Select a service",
+                        onChanged: (String? selectedId) {
+                          print('selected ID : $selectedId');
+                        },
+                        itemText: (item) => item.name,
+                        itemValue: (item) => item._id,
+                        validator: (value) {
+                          if (value == null) return "Please select a service";
+                          return null;
+                        },
+                      ),
+
+                      SizedBox(height: Constants.spaceSmall),
+
+                      // appointment date picker
+                      UIDatePicker(
+                        controller: dateController,
+                        hintText: "Select a date",
+                        value: (value) => "",
+                        validator: (value) {
+                          if (value == null) return "Please select a date";
+                        },
+                      ),
+
+                      SizedBox(height: Constants.spaceSmall),
+
+                      // available time slots
+                      UIDropDown(
+                        items: commonTimeSlot,
+                        hintText: "Select a time slot",
+                        onChanged: (String? selectedId) {
+                          print('selected ID : $selectedId');
+                        },
+                        itemText:
+                            (item) =>
+                                '${item.startTime} - ${item.endTime} - ${item.period}',
+                        itemValue: (item) => item.id,
+                        validator: (value) {
+                          if (value == null) return "Please select a time slot";
+                          return null;
+                        },
+                      ),
+
+                      SizedBox(height: Constants.spaceSmall),
+
+                      // notes
                       UiInputField(
                         controller: notesController,
                         labelText: "Notes",
@@ -86,45 +204,8 @@ class _NewAppointmentState extends State<NewAppointment> {
                         },
                       ),
 
-                      SizedBox(height: Constants.spaceSmall),
+                      SizedBox(height: Constants.spaceLarge * 2),
 
-                      UIDropDown(
-                        items: commonTimeSlot,
-                        hintText: "Select a time slot",
-                        onChanged: (String? selectedId) {
-                          print('selected ID : $selectedId');
-                        },
-                        itemText:
-                            (item) =>
-                                '${item.startTime} - ${item.endTime} - ${item.period}',
-                        itemValue: (item) => item.id,
-                        validator: (value) {
-                          if(value == null) return "Please select a time slot";
-                          return null;
-                        },
-                      ),
-
-                      /*                      UIDropDown(
-                        timeSlots: commonTimeSlot,
-                        hintText: 'Choose a time slot',
-                        onChanged: (String? selectedId) {
-                          if (selectedId != null) {
-                            // Find the complete TimeSlot object if needed
-                            TimeSlot? selectedSlot = commonTimeSlot.firstWhere(
-                                  (slot) => slot.id == selectedId,
-                              orElse: () => TimeSlot("", "", "", ""),
-                            );
-
-                            print('Selected ID: $selectedId');
-                            print('Full details: ${selectedSlot.period} (${selectedSlot.startTime} - ${selectedSlot.endTime})');
-                          }
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please select a time slot';
-                          }
-                          return null;
-                        },),*/
                       UIFilledButton(
                         onPressed: () {
                           DeviceUtils.getDatePicker(context);
