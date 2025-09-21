@@ -28,7 +28,6 @@ class _CompactLayoutState extends State<CompactLayout> {
     if (result.isSuccess) {
       // save user details on encrypted storage
       UserEntity userDetails = result.data!;
-      var jsonValue = jsonEncode(userDetails);
       final storage = await EncryptStorage.create();
       await storage.setValue<String>(Constants.userKey, jsonEncode(userDetails));
 

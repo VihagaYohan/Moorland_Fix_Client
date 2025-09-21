@@ -16,11 +16,6 @@ import 'package:moorland_fix/app/injections/injection_container.dart' as di;
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-/*  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );*/
-  // Initialize with your secret key
-  //await EncryptedSharedPreferences.initialize("my-super-secret-key");
   await di.init(firebaseOptions: DefaultFirebaseOptions.currentPlatform);
   mainCommon(flavor: Flavor.dev, baseUrl: "http://dev.api.com", name: "Dev");
 }
