@@ -28,10 +28,7 @@ class FirebaseServiceImpl implements FirebaseService {
   FirebaseApp get appInstance {
     if (_appInstance != null || _isInitialized) {
       return _appInstance!;
-    }/* else {
-      initialize();
-      throw Exception("Firebase not initialized");
-    }*/
+    }
     initialize();
     if(_appInstance != null || _isInitialized) {
       throw Exception("Firebase not initialized");
