@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:moorland_fix/app/features/appointments/presentation/provider/appointments_provider.dart';
 // shared
 import 'package:moorland_fix/app/shared/index.dart';
+import 'package:provider/provider.dart';
 
 class TimeSlot {
   final String startTime;
@@ -64,10 +66,23 @@ class _NewAppointmentState extends State<NewAppointment> {
 
   // states
   late List<TimeSlot> _availableSlots;
+  late String? serviceId;
+  late String? date;
+  late String? timeSlotId;
+
 
   // controllers
   final TextEditingController notesController = TextEditingController(text: "");
   final TextEditingController dateController = TextEditingController(text: "");
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      Provider.of<AppointmentProvider>(context, listen: false).getServices();
+    });
+  }
 
   void showAlert() {
     DeviceUtils.showAlertDialog(
@@ -116,7 +131,7 @@ class _NewAppointmentState extends State<NewAppointment> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+        return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: Constants.spaceMedium,
         vertical: Constants.spaceLarge,
@@ -138,82 +153,102 @@ class _NewAppointmentState extends State<NewAppointment> {
               children: <Widget>[
                 Form(
                   key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(height: Constants.spaceLarge),
+                  child: Consumer<AppointmentProvider>(
+                    builder: (context, appointmentProvider, _) {
+                      if (appointmentProvider.isLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (appointmentProvider.isError) {
+                        return Center(
+                          child: Text(appointmentProvider.getError.toString()),
+                        );
+                      }
+                      return Column(
+                        children: <Widget>[
+                          SizedBox(height: Constants.spaceLarge),
 
-                      // services
-                      UIDropDown(
-                        items: services,
-                        hintText: "Select a service",
-                        onChanged: (String? selectedId) {
-                          print('selected ID : $selectedId');
-                        },
-                        itemText: (item) => item.name,
-                        itemValue: (item) => item._id,
-                        validator: (value) {
-                          if (value == null) return "Please select a service";
-                          return null;
-                        },
-                      ),
+                          // services
+                          UIDropDown(
+                            items: appointmentProvider.services,
+                            hintText: "Select a service",
+                            onChanged: (String? selectedId) {
+                              setState(() {
+                                serviceId = selectedId;
+                              });
+                            },
+                            itemText: (item) => item.name,
+                            itemValue: (item) => item.uid,
+                            validator: (value) {
+                              if (value == null) {
+                                return "Please select a service";
+                              }
+                              return null;
+                            },
+                          ),
 
-                      SizedBox(height: Constants.spaceSmall),
+                          SizedBox(height: Constants.spaceSmall),
 
-                      // appointment date picker
-                      UIDatePicker(
-                        controller: dateController,
-                        hintText: "Select a date",
-                        value: (value) => "",
-                        validator: (value) {
-                          if (value == null) return "Please select a date";
-                        },
-                      ),
+                          // appointment date picker
+                          UIDatePicker(
+                            controller: dateController,
+                            hintText: "Select a date",
+                            value: (value) => "",
+                            validator: (value) {
+                              if (value == null) return "Please select a date";
+                            },
+                          ),
 
-                      SizedBox(height: Constants.spaceSmall),
+                          SizedBox(height: Constants.spaceSmall),
 
-                      // available time slots
-                      UIDropDown(
-                        items: commonTimeSlot,
-                        hintText: "Select a time slot",
-                        onChanged: (String? selectedId) {
-                          print('selected ID : $selectedId');
-                        },
-                        itemText:
-                            (item) =>
-                                '${item.startTime} - ${item.endTime} - ${item.period}',
-                        itemValue: (item) => item.id,
-                        validator: (value) {
-                          if (value == null) return "Please select a time slot";
-                          return null;
-                        },
-                      ),
+                          // available time slots
+                          UIDropDown(
+                            items: commonTimeSlot,
+                            hintText: "Select a time slot",
+                            onChanged: (String? selectedId) {
+                              setState(() {
+                                timeSlotId = selectedId;
+                              });
+                            },
+                            itemText:
+                                (item) =>
+                                    '${item.startTime} - ${item.endTime} - ${item.period}',
+                            itemValue: (item) => item.id,
+                            validator: (value) {
+                              if (value == null)
+                                return "Please select a time slot";
+                              return null;
+                            },
+                          ),
 
-                      SizedBox(height: Constants.spaceSmall),
+                          SizedBox(height: Constants.spaceSmall),
 
-                      // notes
-                      UiInputField(
-                        controller: notesController,
-                        labelText: "Notes",
-                        hintText: "Add any special notes here",
-                        keyboardType: TextInputType.multiline,
-                        textInputAction: TextInputAction.newline,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter a note";
-                          }
-                        },
-                      ),
+                          // notes
+                          UiInputField(
+                            controller: notesController,
+                            labelText: "Notes",
+                            hintText: "Add any special notes here",
+                            keyboardType: TextInputType.multiline,
+                            textInputAction: TextInputAction.newline,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Please enter a note";
+                              }
+                            },
+                          ),
 
-                      SizedBox(height: Constants.spaceLarge * 2),
+                          SizedBox(height: Constants.spaceLarge * 2),
 
-                      UIFilledButton(
-                        onPressed: () {
-                          DeviceUtils.getDatePicker(context);
-                        },
-                        label: "Reserve",
-                        width: double.infinity,
-                      ),
-                    ],
+                          UIFilledButton(
+                            onPressed: () {
+                              if(_formKey.currentState!.validate()) {
+                                /// reserve appointment
+                              }
+                            },
+                            label: "Reserve",
+                            width: double.infinity,
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],

@@ -10,7 +10,7 @@ class AllServices {
 
   AllServices(this._repository);
 
-  Future<Result<List<Services>>> call() async {
+  Future<Result<List<Services>>> initiate() async {
     return _repository.allServices();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:moorland_fix/app/shared/services/firebase_service.dart';
 
@@ -27,8 +28,27 @@ class FirebaseServiceImpl implements FirebaseService {
   FirebaseApp get appInstance {
     if (_appInstance != null || _isInitialized) {
       return _appInstance!;
-    } else {
+    }/* else {
+      initialize();
+      throw Exception("Firebase not initialized");
+    }*/
+    initialize();
+    if(_appInstance != null || _isInitialized) {
       throw Exception("Firebase not initialized");
     }
+    return _appInstance!;
+  }
+
+  // get firestore instance
+  @override
+  FirebaseFirestore get firestoreInstance {
+    if(_appInstance != null || _isInitialized) {
+      return FirebaseFirestore.instance;
+    }
+    initialize();
+    if(_appInstance != null || _isInitialized) {
+      throw Exception("Firebase not initialized");
+    }
+    return FirebaseFirestore.instance;
   }
 }

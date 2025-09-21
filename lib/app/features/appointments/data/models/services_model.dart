@@ -15,6 +15,16 @@ class ServiceModel {
     this.description,
   );
 
+  factory ServiceModel.fromJson(Map<String, dynamic> json){
+    return ServiceModel(
+      json['_id'],
+      json['name'],
+      json['slotsPerDay'],
+      json['wholeDayBooking'],
+      json['description'],
+    );
+  }
+
   Services toEntity() {
     return Services(
       uid: _id,

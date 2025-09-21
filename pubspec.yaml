@@ -50,6 +50,7 @@ dependencies:
   equatable: ^2.0.7
   firebase_storage: ^13.0.1
   cloud_firestore: ^6.0.1
+  encrypt_shared_preferences: ^0.9.10
 
 dev_dependencies:
   flutter_test:
