@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:encrypt_shared_preferences/provider.dart';
 
 // app common entry point
 import 'package:moorland_fix/main_common.dart';
@@ -15,9 +16,6 @@ import 'package:moorland_fix/app/injections/injection_container.dart' as di;
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-/*  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );*/
   await di.init(firebaseOptions: DefaultFirebaseOptions.currentPlatform);
   mainCommon(flavor: Flavor.dev, baseUrl: "http://dev.api.com", name: "Dev");
 }

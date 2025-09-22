@@ -7,4 +7,6 @@ class Constants {
   static const double spaceMedium = 16.0;
   static const double spaceLarge = 24.0;
 
+  // encrypted storage keys
+  static const String userKey = "user";
 }

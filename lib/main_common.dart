@@ -14,21 +14,3 @@ void mainCommon({
   runApp(
       const MoorlandApp());
 }
-
-/*
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Moorland Fix",
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      routes: AppNavigator.routes,
-      home: const HomePage(),
-    );
-  }
-}
-*/

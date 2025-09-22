@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-
-// theme
-import 'package:moorland_fix/app/theme/index.dart';
-
-// shared
-import 'package:moorland_fix/app/shared/index.dart';
-
+import 'package:moorland_fix/app/features/appointments/presentation/widgets/new_appointment.dart';
 // flavors
 import 'package:moorland_fix/app/flavors/flavor_config.dart';
 
@@ -30,7 +24,18 @@ class _CompactLayoutState extends State<CompactLayout> {
             Text("Appointment page"),
             Text('App - ${FlavorConfig.instance.name}'),
           ],
-        )
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return NewAppointment();
+            },
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -4,3 +4,4 @@ export 'package:moorland_fix/app/theme/custom_themes/bottom_navigation_theme.dar
 export 'package:moorland_fix/app/theme/custom_themes/navigation_rail_theme.dart';
 export 'package:moorland_fix/app/theme/custom_themes/navigation_drawer_theme.dart';
 export 'package:moorland_fix/app/theme/custom_themes/divider_theme.dart';
+export 'package:moorland_fix/app/theme/custom_themes/text_field_theme.dart';
