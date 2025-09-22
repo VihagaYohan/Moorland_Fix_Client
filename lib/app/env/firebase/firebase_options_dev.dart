@@ -63,6 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '341211390923',
     projectId: 'moorlandfix-dev',
     storageBucket: 'moorlandfix-dev.firebasestorage.app',
+    androidClientId: '341211390923-3od56ufrm64d3suf4jok7b6gdqo6upc6.apps.googleusercontent.com',
+    iosClientId: '341211390923-f34srsnuhuklg2m42b6q7auihk14hf51.apps.googleusercontent.com',
     iosBundleId: 'com.moorland.moorlandfix.dev',
   );
+
 }

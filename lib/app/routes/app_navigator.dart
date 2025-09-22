@@ -10,6 +10,7 @@ class AppNavigator {
   static Map<String, WidgetBuilder> routes = {
     Routes.onboarding: (context) => const OnboardingPage(),
     Routes.login: (context) => const LoginPage(),
-    Routes.home: (context) => const HomePage()
+    Routes.home: (context) => const HomePage(),
+    Routes.newAppointment: (context) => const NewAppointment()
   };
 }

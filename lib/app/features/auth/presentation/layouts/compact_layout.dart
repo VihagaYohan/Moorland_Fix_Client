@@ -1,12 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:moorland_fix/app/features/auth/domain/entities/_index.dart';
 import 'package:moorland_fix/app/features/auth/presentation/provider/auth_provider.dart';
 // widget
 import 'package:moorland_fix/app/features/auth/presentation/widgets/index.dart';
 import 'package:moorland_fix/app/features/home/presentation/root_home_page.dart';
+
+// provider
 import 'package:provider/provider.dart';
 
 import '../../../../shared/constants.dart';
 import '../../../../shared/widgets/buttons/ui_filled_button.dart';
+import 'package:moorland_fix/app/shared/index.dart';
 
 class CompactLayout extends StatefulWidget {
   const CompactLayout({super.key});
@@ -20,6 +26,11 @@ class _CompactLayoutState extends State<CompactLayout> {
   handleAuthentication(AuthProvider authProvider, BuildContext context) async {
     var result = await authProvider.signInWithGoogle();
     if (result.isSuccess) {
+      // save user details on encrypted storage
+      UserEntity userDetails = result.data!;
+      final storage = await EncryptStorage.create();
+      await storage.setValue<String>(Constants.userKey, jsonEncode(userDetails));
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
