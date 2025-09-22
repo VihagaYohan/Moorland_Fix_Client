@@ -1,57 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:moorland_fix/app/features/appointments/domain/entities/_index.dart';
+// provider
 import 'package:moorland_fix/app/features/appointments/presentation/provider/appointments_provider.dart';
+// user entity domain
+import 'package:moorland_fix/app/features/auth/domain/entities/_index.dart';
 // shared
 import 'package:moorland_fix/app/shared/index.dart';
+import 'package:moorland_fix/app/shared/services/index.dart';
 import 'package:provider/provider.dart';
-
-class TimeSlot {
-  final String startTime;
-  final String endTime;
-  final String period;
-  final String id;
-
-  TimeSlot(this.startTime, this.endTime, this.period, this.id);
-
-  // Optional: Add a toString method for better display
-  @override
-  String toString() {
-    return '$startTime - $endTime ($period)';
-  }
-}
-
-class Services {
-  final String _id;
-  final String name;
-  final int slotsPerDay;
-  final bool wholeDayBooking;
-  final String description;
-  List<TimeSlot>? timeSlots;
-
-  Services(
-    this._id,
-    this.name,
-    this.slotsPerDay,
-    this.wholeDayBooking,
-    this.description, {
-    this.timeSlots,
-  }) {
-    if (wholeDayBooking == false) {
-      timeSlots = commonTimeSlots;
-    } else {
-      timeSlots = wholeDaySlot;
-    }
-  }
-
-  static final List<TimeSlot> commonTimeSlots = [
-    TimeSlot("08:00", "11:00", "morning", "1"),
-    TimeSlot("11:00", "14:00", "afternoon", "2"),
-    TimeSlot("14:00", "17:00", "evening", "3"),
-  ];
-
-  static final List<TimeSlot> wholeDaySlot = [
-    TimeSlot("08:00", "05:00", "whole day", "1"),
-  ];
-}
+import 'package:table_calendar/table_calendar.dart';
 
 class NewAppointment extends StatefulWidget {
   const NewAppointment({super.key});
@@ -69,18 +26,30 @@ class _NewAppointmentState extends State<NewAppointment> {
   late String? serviceId;
   late String? date;
   late String? timeSlotId;
-
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  UserEntity? currentUser;
 
   // controllers
-  final TextEditingController notesController = TextEditingController(text: "");
+  final TextEditingController notesController = TextEditingController(text: "note");
   final TextEditingController dateController = TextEditingController(text: "");
 
   @override
   void initState() {
     super.initState();
+    getUserProfile();
 
     Future.microtask(() {
       Provider.of<AppointmentProvider>(context, listen: false).getServices();
+    });
+  }
+
+  void getUserProfile() async {
+    final userProfile = UserProfile();
+    UserEntity? userEntity = await userProfile.getUserProfile();
+    setState(() {
+      currentUser = userEntity;
     });
   }
 
@@ -95,43 +64,14 @@ class _NewAppointmentState extends State<NewAppointment> {
   }
 
   final List<TimeSlot> commonTimeSlot = [
-    TimeSlot("08:00", "11:00", "morning", "1"),
-    TimeSlot("11:00", "14:00", 'afternoon', "2"),
-    TimeSlot("14:00", "17:00", 'evening', "3"),
-  ];
-
-  final List<TimeSlot> availableTimeSlots = [
-    TimeSlot("08:00", "11:00", "morning", "1"),
-  ];
-
-  final List<Services> services = [
-    Services(
-      "1",
-      "Electrical",
-      4,
-      false,
-      "Wiring, outlet installation, lighting, electrical repair",
-    ),
-    Services(
-      "2",
-      "General Handyman",
-      4,
-      false,
-      "Various home repairs and maintenance tasks",
-    ),
-    Services(
-      "3",
-      "Gardening",
-      3,
-      false,
-      "Lawn care, planting, landscaping, tree trimming",
-    ),
-    Services("4", "Painting", 1, true, "Interior and exterior painting"),
+    TimeSlot("3CXSz5ZE4ggdNozLKdSM","08:00", "11:00", "morning"),
+    //TimeSlot("11:00", "14:00", 'afternoon', "2"),
+    //TimeSlot("14:00", "17:00", 'evening', "3"),
   ];
 
   @override
   Widget build(BuildContext context) {
-        return Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: Constants.spaceMedium,
         vertical: Constants.spaceLarge,
@@ -188,13 +128,29 @@ class _NewAppointmentState extends State<NewAppointment> {
                           SizedBox(height: Constants.spaceSmall),
 
                           // appointment date picker
-                          UIDatePicker(
+                          /*                          UIDatePicker(
                             controller: dateController,
                             hintText: "Select a date",
                             value: (value) => "",
                             validator: (value) {
                               if (value == null) return "Please select a date";
                             },
+                          ),*/
+                          TableCalendar(
+                            firstDay: DateTime.utc(2010, 10, 16),
+                            lastDay: DateTime.utc(2030, 3, 14),
+                            focusedDay: DateTime.now(),
+                            selectedDayPredicate: (day) {
+                              return isSameDay(_selectedDay, day);
+                            },
+                            onDaySelected: (selectedDay, focusedDay) {
+                              setState(() {
+                                _selectedDay = selectedDay;
+                                _focusedDay =
+                                    focusedDay; // update `_focusedDay` here as well
+                              });
+                            },
+                            calendarBuilders: CalendarBuilders(),
                           ),
 
                           SizedBox(height: Constants.spaceSmall),
@@ -211,7 +167,7 @@ class _NewAppointmentState extends State<NewAppointment> {
                             itemText:
                                 (item) =>
                                     '${item.startTime} - ${item.endTime} - ${item.period}',
-                            itemValue: (item) => item.id,
+                            itemValue: (item) =>  item.uid,
                             validator: (value) {
                               if (value == null)
                                 return "Please select a time slot";
@@ -239,8 +195,21 @@ class _NewAppointmentState extends State<NewAppointment> {
 
                           UIFilledButton(
                             onPressed: () {
-                              if(_formKey.currentState!.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 /// reserve appointment
+                                AppointmentRequest payload = AppointmentRequest(
+                                  userId: currentUser!.uid,
+                                  service: appointmentProvider.services[0],
+                                  selectedDate: _selectedDay!,
+                                  timeSlot: TimeSlot(
+                                    "3CXSz5ZE4ggdNozLKdSM",
+                                    "'08:00",
+                                    "11:00",
+                                    "morning",
+                                  ),
+                                  status: "Booked",
+                                );
+                                appointmentProvider.reserveAppointment(payload);
                               }
                             },
                             label: "Reserve",

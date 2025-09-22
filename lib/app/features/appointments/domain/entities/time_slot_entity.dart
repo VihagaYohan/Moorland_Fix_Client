@@ -1,13 +1,19 @@
+import '../../data/models/time_slot_model.dart';
+
 class TimeSlot {
-  final String _id;
+  final String uid;
   final String startTime;
   final String endTime;
   final String period;
 
-  TimeSlot(this._id, this.startTime, this.endTime, this.period);
+  TimeSlot(this.uid, this.startTime, this.endTime, this.period);
 
   @override
   String toString() {
-    return "$_id - $startTime - $endTime ($period)";
+    return "$uid - $startTime - $endTime ($period)";
+  }
+
+  TimeSlotModel toModel() {
+    return TimeSlotModel(uid, startTime, endTime, period);
   }
 }

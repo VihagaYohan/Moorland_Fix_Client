@@ -1,20 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-
+import 'package:moorland_fix/app/features/appointments/data/data_sources/appointment_remote_impl.dart';
+import 'package:moorland_fix/app/features/appointments/data/repositoryImpl/appointment_repositoryImpl.dart';
 import 'package:moorland_fix/app/features/appointments/domain/repositories/appointment_repository.dart';
-
+import 'package:moorland_fix/app/features/appointments/domain/usecases/_index.dart';
 import 'package:moorland_fix/app/features/appointments/presentation/provider/appointments_provider.dart';
 // data sources
 import 'package:moorland_fix/app/features/auth/data/data_sources/auth_remote_access_impl.dart';
-import 'package:moorland_fix/app/features/appointments/data/data_sources/appointment_remote_impl.dart';
 // domain repositories
 import 'package:moorland_fix/app/features/auth/domain/repositories/auth_repository.dart';
 // domain use cases
 import 'package:moorland_fix/app/features/auth/domain/usecases/_index.dart';
-import 'package:moorland_fix/app/features/appointments/domain/usecases/_index.dart';
-
 // providers
 import 'package:moorland_fix/app/features/auth/presentation/provider/auth_provider.dart';
 // services
@@ -22,7 +19,6 @@ import 'package:moorland_fix/app/shared/services/index.dart';
 
 // data repositories
 import '../features/auth/data/repositoryImpl/auth_repositoryImpl.dart';
-import 'package:moorland_fix/app/features/appointments/data/repositoryImpl/appointment_repositoryImpl.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -65,7 +61,7 @@ Future<void> init({required FirebaseOptions firebaseOptions}) async {
     () => AuthProvider(signInWithGoogle: getIt()),
   );
   getIt.registerLazySingleton<AppointmentProvider>(
-    () => AppointmentProvider(allServices: getIt()),
+    () => AppointmentProvider(allServices: getIt(), addBooking: getIt()),
   );
 
   // use cases
@@ -73,4 +69,5 @@ Future<void> init({required FirebaseOptions firebaseOptions}) async {
   getIt.registerLazySingleton(
     () => AllServices(getIt<AppointmentRepository>()),
   );
+  getIt.registerLazySingleton(() => AddBooking(getIt<AppointmentRepository>()));
 }

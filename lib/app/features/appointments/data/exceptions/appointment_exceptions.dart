@@ -7,3 +7,8 @@ abstract class AppointmentException implements Exception {
 class EmptyListException extends AppointmentException {
   EmptyListException(super.message);
 }
+
+class AllSlotsBookedException extends AppointmentException {
+  AllSlotsBookedException(super.message);
+}
+

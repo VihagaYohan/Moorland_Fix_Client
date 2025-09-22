@@ -1,7 +1,6 @@
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:moorland_fix/app/features/appointments/presentation/provider/appointments_provider.dart';
-import 'package:moorland_fix/app/features/auth/domain/entities/_index.dart';
 // providers
 import 'package:moorland_fix/app/features/auth/presentation/provider/auth_provider.dart';
 // pages

@@ -1,7 +1,7 @@
 // datasource
 import 'package:moorland_fix/app/features/appointments/data/data_sources/appointment_remote_impl.dart';
 // domain
-import 'package:moorland_fix/app/features/appointments/domain/entities/service_entity.dart';
+import 'package:moorland_fix/app/features/appointments/domain/entities/_index.dart';
 import 'package:moorland_fix/app/features/appointments/domain/repositories/appointment_repository.dart';
 // shared
 import 'package:moorland_fix/app/shared/result.dart';
@@ -25,5 +25,12 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
       }
     }
     return Result.success(servicesList);
+  }
+
+  @override
+  Future<Result<void>> reserveAppointment(AppointmentRequest payload) async {
+    // TODO: implement reserveAppointment
+    Result result = await dataSource.bookService(payload);
+    return result;
   }
 }

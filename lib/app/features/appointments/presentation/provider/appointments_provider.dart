@@ -5,8 +5,9 @@ import 'package:moorland_fix/app/features/appointments/domain/usecases/_index.da
 
 class AppointmentProvider extends ChangeNotifier {
   final AllServices allServices;
+  final AddBooking addBooking;
 
-  AppointmentProvider({required this.allServices});
+  AppointmentProvider({required this.allServices, required this.addBooking});
 
   // loading
   bool _isLoading = false;
@@ -25,12 +26,14 @@ class AppointmentProvider extends ChangeNotifier {
 
   // isError
   bool _isError = false;
+
   bool get isError => _isError;
 
+  // get all services
   Future<void> getServices() async {
     _isLoading = true;
 
-final result = await allServices.initiate();
+    final result = await allServices.initiate();
     if (result.isSuccess && result.data != null) {
       _services = result.data!;
     } else if (result.isSuccess && result.data!.isEmpty) {
@@ -41,6 +44,19 @@ final result = await allServices.initiate();
       _error = result.error;
     }
 
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  // add booking
+  Future<void> reserveAppointment(AppointmentRequest payload) async {
+    _isLoading = true;
+    final result = await addBooking.initiate(payload);
+    if(result.isSuccess) {
+      final message = result.data;
+    } else {
+
+    }
     _isLoading = false;
     notifyListeners();
   }
