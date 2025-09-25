@@ -1,5 +1,6 @@
 // domain entities
 // data models
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moorland_fix/app/features/appointments/data/models/_index.dart';
 import 'package:moorland_fix/app/features/appointments/domain/entities/_index.dart';
 
@@ -25,18 +26,21 @@ class AppointmentModel {
       '_id': id,
       'userId': userId,
       'service': service.toJson(),
-      'selectedDate': selectedDate,
+      'selectedDate': Timestamp.fromDate(selectedDate),
       'timeSlot': timeSlot.toJson(),
       'status': status,
     };
   }
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json) {
+    final ts = json['selectedDate'];
     return AppointmentModel(
       json['_id'],
       json['userId'],
       ServiceModel.fromJson(json['service']),
-      DateTime.parse(json['selectedDate']),
+      ts is Timestamp
+          ? ts.toDate()
+          : (ts is String ? DateTime.parse(ts) : DateTime.now()),
       TimeSlotModel.fromJson(json['timeSlot']),
       json['status'],
     );
