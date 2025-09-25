@@ -33,4 +33,17 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
     Result result = await dataSource.bookService(payload);
     return result;
   }
+
+  @override
+  Future<Result<List<TimeSlot>>> getBookingDates(DateTime date) async {
+    // TODO: implement getBookingDates
+    List<TimeSlot> timeSlotList = [];
+    Result<List<TimeSlotModel>> result = await dataSource.getAvailableTimeSlots(date);
+    if(result.isSuccess && result.data != null) {
+      for(var slot in result.data!) {
+        timeSlotList.add(slot.toEntity());
+      }
+    }
+    return Result.success(timeSlotList);
+  }
 }

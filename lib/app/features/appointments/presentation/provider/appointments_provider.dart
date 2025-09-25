@@ -6,8 +6,13 @@ import 'package:moorland_fix/app/features/appointments/domain/usecases/_index.da
 class AppointmentProvider extends ChangeNotifier {
   final AllServices allServices;
   final AddBooking addBooking;
+  final GetBookingDates getBookingDates;
 
-  AppointmentProvider({required this.allServices, required this.addBooking});
+  AppointmentProvider({
+    required this.allServices,
+    required this.addBooking,
+    required this.getBookingDates,
+  });
 
   // loading
   bool _isLoading = false;
@@ -18,6 +23,11 @@ class AppointmentProvider extends ChangeNotifier {
   List<Services> _services = [];
 
   List<Services> get services => _services;
+
+  // available time slots
+  List<TimeSlot> _availableTimeSlots = [];
+
+  List<TimeSlot> get availableTimeSlots => _availableTimeSlots;
 
   // error
   Exception? _error = null;
@@ -52,10 +62,26 @@ class AppointmentProvider extends ChangeNotifier {
   Future<void> reserveAppointment(AppointmentRequest payload) async {
     _isLoading = true;
     final result = await addBooking.initiate(payload);
-    if(result.isSuccess) {
+    if (result.isSuccess) {
       final message = result.data;
     } else {
+      _isError = true;
+      _error = result.error;
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
 
+  // fetch available time slots for the selected date
+  Future<void> fetchAvailableTimeSlots(DateTime date) async {
+    _isLoading = true;
+
+    final result = await getBookingDates.initiate(date);
+    if (result.isSuccess && result.data != null && result.data!.isNotEmpty) {
+      _availableTimeSlots = result.data!;
+    } else {
+      _isError = true;
+      _error = result.error;
     }
     _isLoading = false;
     notifyListeners();

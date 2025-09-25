@@ -12,3 +12,6 @@ class AllSlotsBookedException extends AppointmentException {
   AllSlotsBookedException(super.message);
 }
 
+class PaintingBookingNotAllowdException extends AppointmentException {
+  PaintingBookingNotAllowdException(super.message);
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moorland_fix/app/features/appointments/domain/entities/_index.dart';
 // provider
 import 'package:moorland_fix/app/features/appointments/presentation/provider/appointments_provider.dart';
+import 'package:moorland_fix/app/features/appointments/presentation/widgets/_index.dart';
 // user entity domain
 import 'package:moorland_fix/app/features/auth/domain/entities/_index.dart';
 // shared
@@ -24,6 +25,8 @@ class _NewAppointmentState extends State<NewAppointment> {
   // states
   late List<TimeSlot> _availableSlots;
   late String? serviceId;
+  late Services? selectedService;
+  late TimeSlot? selectedTimeSlot;
   late String? date;
   late String? timeSlotId;
   CalendarFormat _calendarFormat = CalendarFormat.month;
@@ -32,7 +35,9 @@ class _NewAppointmentState extends State<NewAppointment> {
   UserEntity? currentUser;
 
   // controllers
-  final TextEditingController notesController = TextEditingController(text: "note");
+  final TextEditingController notesController = TextEditingController(
+    text: "note",
+  );
   final TextEditingController dateController = TextEditingController(text: "");
 
   @override
@@ -64,9 +69,7 @@ class _NewAppointmentState extends State<NewAppointment> {
   }
 
   final List<TimeSlot> commonTimeSlot = [
-    TimeSlot("3CXSz5ZE4ggdNozLKdSM","08:00", "11:00", "morning"),
-    //TimeSlot("11:00", "14:00", 'afternoon', "2"),
-    //TimeSlot("14:00", "17:00", 'evening', "3"),
+    TimeSlot("3CXSz5ZE4ggdNozLKdSM", "08:00", "11:00", "morning"),
   ];
 
   @override
@@ -80,7 +83,7 @@ class _NewAppointmentState extends State<NewAppointment> {
         children: [
           // title
           Text(
-            "Reserve a date and a time slot",
+            "Reserve a date and a time slot ${_focusedDay.year}",
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -106,13 +109,68 @@ class _NewAppointmentState extends State<NewAppointment> {
                         children: <Widget>[
                           SizedBox(height: Constants.spaceLarge),
 
+                          TableCalendar(
+                            firstDay: DateTime.utc(2010, 10, 16),
+                            lastDay: DateTime.utc(2030, 3, 14),
+                            focusedDay: DateTime.now(),
+                            selectedDayPredicate: (day) {
+                              return isSameDay(_selectedDay, day);
+                            },
+                            onDaySelected: (selectedDay, focusedDay) async {
+                              setState(() {
+                                _selectedDay = selectedDay;
+                                _focusedDay =
+                                    focusedDay; // update `_focusedDay` here as well
+                              });
+
+                              // fetch available time slots for the selected date
+                              print("selected date: $selectedDay");
+                              await appointmentProvider.fetchAvailableTimeSlots(
+                                selectedDay,
+                              );
+                            },
+                          ),
+
+                          SizedBox(height: Constants.spaceSmall),
+
+                          // available time slots
+                          if (appointmentProvider.availableTimeSlots.isNotEmpty)
+                            UIDropDown(
+                              items: appointmentProvider.availableTimeSlots,
+                              hintText: "Select a time slot",
+                              onChanged: (String? selectedId) {
+                                setState(() {
+                                  selectedTimeSlot = appointmentProvider
+                                      .availableTimeSlots
+                                      .firstWhere(
+                                        (timeSlot) =>
+                                            timeSlot.uid == selectedId,
+                                      );
+                                });
+                              },
+                              itemText:
+                                  (item) =>
+                                      '${item.startTime} - ${item.endTime} - ${item.period}',
+                              itemValue: (item) => item.uid,
+                              validator: (value) {
+                                if (value == null)
+                                  return "Please select a time slot";
+                                return null;
+                              },
+                            ),
+
+                          SizedBox(height: Constants.spaceSmall),
+
                           // services
                           UIDropDown(
                             items: appointmentProvider.services,
                             hintText: "Select a service",
-                            onChanged: (String? selectedId) {
+                            onChanged: (String? selectedId) async {
                               setState(() {
-                                serviceId = selectedId;
+                                selectedService = appointmentProvider.services
+                                    .firstWhere(
+                                      (service) => service.uid == selectedId,
+                                    );
                               });
                             },
                             itemText: (item) => item.name,
@@ -121,56 +179,6 @@ class _NewAppointmentState extends State<NewAppointment> {
                               if (value == null) {
                                 return "Please select a service";
                               }
-                              return null;
-                            },
-                          ),
-
-                          SizedBox(height: Constants.spaceSmall),
-
-                          // appointment date picker
-                          /*                          UIDatePicker(
-                            controller: dateController,
-                            hintText: "Select a date",
-                            value: (value) => "",
-                            validator: (value) {
-                              if (value == null) return "Please select a date";
-                            },
-                          ),*/
-                          TableCalendar(
-                            firstDay: DateTime.utc(2010, 10, 16),
-                            lastDay: DateTime.utc(2030, 3, 14),
-                            focusedDay: DateTime.now(),
-                            selectedDayPredicate: (day) {
-                              return isSameDay(_selectedDay, day);
-                            },
-                            onDaySelected: (selectedDay, focusedDay) {
-                              setState(() {
-                                _selectedDay = selectedDay;
-                                _focusedDay =
-                                    focusedDay; // update `_focusedDay` here as well
-                              });
-                            },
-                            calendarBuilders: CalendarBuilders(),
-                          ),
-
-                          SizedBox(height: Constants.spaceSmall),
-
-                          // available time slots
-                          UIDropDown(
-                            items: commonTimeSlot,
-                            hintText: "Select a time slot",
-                            onChanged: (String? selectedId) {
-                              setState(() {
-                                timeSlotId = selectedId;
-                              });
-                            },
-                            itemText:
-                                (item) =>
-                                    '${item.startTime} - ${item.endTime} - ${item.period}',
-                            itemValue: (item) =>  item.uid,
-                            validator: (value) {
-                              if (value == null)
-                                return "Please select a time slot";
                               return null;
                             },
                           ),
@@ -199,14 +207,17 @@ class _NewAppointmentState extends State<NewAppointment> {
                                 /// reserve appointment
                                 AppointmentRequest payload = AppointmentRequest(
                                   userId: currentUser!.uid,
-                                  service: appointmentProvider.services[0],
+                                  service:
+                                      selectedService != null
+                                          ? selectedService!
+                                          : appointmentProvider.services.first,
                                   selectedDate: _selectedDay!,
-                                  timeSlot: TimeSlot(
-                                    "3CXSz5ZE4ggdNozLKdSM",
-                                    "'08:00",
-                                    "11:00",
-                                    "morning",
-                                  ),
+                                  timeSlot:
+                                      selectedTimeSlot != null
+                                          ? selectedTimeSlot!
+                                          : appointmentProvider
+                                              .availableTimeSlots
+                                              .first,
                                   status: "Booked",
                                 );
                                 appointmentProvider.reserveAppointment(payload);
