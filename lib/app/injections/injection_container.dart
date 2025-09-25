@@ -61,7 +61,11 @@ Future<void> init({required FirebaseOptions firebaseOptions}) async {
     () => AuthProvider(signInWithGoogle: getIt()),
   );
   getIt.registerLazySingleton<AppointmentProvider>(
-    () => AppointmentProvider(allServices: getIt(), addBooking: getIt()),
+    () => AppointmentProvider(
+      allServices: getIt(),
+      addBooking: getIt(),
+      getBookingDates: getIt(),
+    ),
   );
 
   // use cases
@@ -70,4 +74,7 @@ Future<void> init({required FirebaseOptions firebaseOptions}) async {
     () => AllServices(getIt<AppointmentRepository>()),
   );
   getIt.registerLazySingleton(() => AddBooking(getIt<AppointmentRepository>()));
+  getIt.registerLazySingleton(
+    () => GetBookingDates(getIt<AppointmentRepository>()),
+  );
 }
