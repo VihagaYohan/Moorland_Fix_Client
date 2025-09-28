@@ -64,7 +64,7 @@ class AppointmentRemoteImpl {
       if (hasRecords == true) {
         // check if the timeslots are filled for the given date
         final snapshots = await appointmentRef.get();
-        if (!snapshots.exists) {
+        if (snapshots.exists) {
           List<dynamic> bookedSlots = snapshots['bookedSlots'];
           if (bookedSlots.length >= 3) {
             Result.failure(

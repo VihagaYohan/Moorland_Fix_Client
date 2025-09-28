@@ -32,14 +32,13 @@ class _NewAppointmentState extends State<NewAppointment> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   UserEntity? currentUser;
-  bool  showForm = false;
+  bool showForm = false;
 
   // controllers
   final TextEditingController notesController = TextEditingController(
     text: "note",
   );
   final TextEditingController dateController = TextEditingController(text: "");
-
 
   @override
   void initState() {
@@ -103,7 +102,7 @@ class _NewAppointmentState extends State<NewAppointment> {
                       } else if (appointmentProvider.isError) {
                         if (appointmentProvider.getError != null) {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            setState((){
+                            setState(() {
                               showForm = false;
                             });
                             showAlert(
@@ -142,7 +141,12 @@ class _NewAppointmentState extends State<NewAppointment> {
                               );
 
                               setState(() {
-                                showForm = appointmentProvider.availableTimeSlots.isNotEmpty ? true : false;
+                                showForm =
+                                    appointmentProvider
+                                            .availableTimeSlots
+                                            .isNotEmpty
+                                        ? true
+                                        : false;
                               });
                             },
                           ),
@@ -230,14 +234,17 @@ class _NewAppointmentState extends State<NewAppointment> {
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
                                       // check if the user select whole day for the painting service
-                                      if(selectedService!.name == "Painting" && selectedTimeSlot!.period != "whole-day") {
+                                      if (selectedService!.name == "Painting" &&
+                                          selectedTimeSlot!.period !=
+                                              "whole-day") {
                                         showAlert(
                                           "Alert",
-                                          "Painting service cannot be booked during the day.\nPlease select whole-day time slot.",
+                                          "Painting service cannot be booked during the day.\nPlease select whole-day time slot or else select a different date.",
                                           () {},
                                         );
                                         return;
                                       }
+
                                       /// reserve appointment
                                       AppointmentRequest payload =
                                           AppointmentRequest(
