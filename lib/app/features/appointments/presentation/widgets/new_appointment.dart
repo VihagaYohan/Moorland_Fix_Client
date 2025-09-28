@@ -267,6 +267,15 @@ class _NewAppointmentState extends State<NewAppointment> {
                                       appointmentProvider.reserveAppointment(
                                         payload,
                                       );
+
+                                      // show success message
+                                      showAlert(
+                                        "Success",
+                                        "Appointment booked successfully",
+                                        () {
+                                          Navigator.pop(context);
+                                        },
+                                      );
                                     }
                                   },
                                   label: "Reserve",
