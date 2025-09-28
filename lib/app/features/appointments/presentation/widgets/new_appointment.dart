@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:moorland_fix/app/features/appointments/domain/entities/_index.dart';
 // provider
 import 'package:moorland_fix/app/features/appointments/presentation/provider/appointments_provider.dart';
-import 'package:moorland_fix/app/features/appointments/presentation/widgets/_index.dart';
 // user entity domain
 import 'package:moorland_fix/app/features/auth/domain/entities/_index.dart';
 // shared
@@ -68,10 +67,6 @@ class _NewAppointmentState extends State<NewAppointment> {
     );
   }
 
-  final List<TimeSlot> commonTimeSlot = [
-    TimeSlot("3CXSz5ZE4ggdNozLKdSM", "08:00", "11:00", "morning"),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -83,7 +78,7 @@ class _NewAppointmentState extends State<NewAppointment> {
         children: [
           // title
           Text(
-            "Reserve a date and a time slot ${_focusedDay.year}",
+            "Reserve a date and a time slot",
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -99,7 +94,13 @@ class _NewAppointmentState extends State<NewAppointment> {
                   child: Consumer<AppointmentProvider>(
                     builder: (context, appointmentProvider, _) {
                       if (appointmentProvider.isLoading) {
-                        return const Center(child: CircularProgressIndicator());
+                        return SizedBox(
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
                       } else if (appointmentProvider.isError) {
                         return Center(
                           child: Text(appointmentProvider.getError.toString()),
