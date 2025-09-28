@@ -157,22 +157,6 @@ class AppointmentRemoteImpl {
           }
         }
 
-        /*          for (var slot in bookedSlots) {
-            final bookedSlot = TimeSlotModel.fromJson(slot);
-            for (var timeSlot in allTimeSlots) {
-              // skip booked or whole-day periods
-              if (bookedSlot.period != timeSlot.period &&
-                  (bookedSlots.length <= 1
-                      ? timeSlot.period != "whole-day"
-                      : true)) {
-                if (!addedPeriods.contains(timeSlot.period)) {
-                  availableTimeSlots.add(timeSlot);
-                  addedPeriods.add(timeSlot.period);
-                }
-              }
-            }
-          }*/
-
         // sort the available time slots
         availableTimeSlots.sort((a, b) => a.startTime.compareTo(b.startTime));
 
