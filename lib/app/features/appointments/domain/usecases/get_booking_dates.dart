@@ -12,7 +12,7 @@ class GetBookingDates {
 
   GetBookingDates(this._repository);
 
-  Future<Result<List<TimeSlot>>> initiate(DateTime date) async {
+  Future<Result<dynamic>> initiate(DateTime date) async {
     return _repository.getBookingDates(date);
   }
 }
