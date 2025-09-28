@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:moorland_fix/app/features/appointments/domain/entities/_index.dart';
 // provider
 import 'package:moorland_fix/app/features/appointments/presentation/provider/appointments_provider.dart';
-import 'package:moorland_fix/app/features/appointments/presentation/widgets/_index.dart';
 // user entity domain
 import 'package:moorland_fix/app/features/auth/domain/entities/_index.dart';
 // shared
@@ -33,6 +32,7 @@ class _NewAppointmentState extends State<NewAppointment> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   UserEntity? currentUser;
+  bool showForm = false;
 
   // controllers
   final TextEditingController notesController = TextEditingController(
@@ -58,19 +58,9 @@ class _NewAppointmentState extends State<NewAppointment> {
     });
   }
 
-  void showAlert() {
-    DeviceUtils.showAlertDialog(
-      context,
-      "Reservation Completed",
-      "You've successfully reserved a slot for ${notesController.text} on ${DateTime.now().toString()}",
-      "OK",
-      () {},
-    );
+  void showAlert(String title, String message, Function() onPressed) {
+    DeviceUtils.showAlertDialog(context, title, message, "OK", onPressed());
   }
-
-  final List<TimeSlot> commonTimeSlot = [
-    TimeSlot("3CXSz5ZE4ggdNozLKdSM", "08:00", "11:00", "morning"),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +72,14 @@ class _NewAppointmentState extends State<NewAppointment> {
       child: Column(
         children: [
           // title
-          Text(
-            "Reserve a date and a time slot ${_focusedDay.year}",
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+          Center(
+            child: Text(
+              "Reserve an appointment",
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
 
@@ -99,11 +92,30 @@ class _NewAppointmentState extends State<NewAppointment> {
                   child: Consumer<AppointmentProvider>(
                     builder: (context, appointmentProvider, _) {
                       if (appointmentProvider.isLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (appointmentProvider.isError) {
-                        return Center(
-                          child: Text(appointmentProvider.getError.toString()),
+                        return SizedBox(
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         );
+                      } else if (appointmentProvider.isError) {
+                        if (appointmentProvider.getError != null) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            setState(() {
+                              showForm = false;
+                            });
+                            showAlert(
+                              "Alert",
+                              appointmentProvider.getError!
+                                  .toString()
+                                  .replaceFirst("Exception: ", ""),
+                              () {
+                                appointmentProvider.resetState();
+                              },
+                            );
+                          });
+                        }
                       }
                       return Column(
                         children: <Widget>[
@@ -124,108 +136,153 @@ class _NewAppointmentState extends State<NewAppointment> {
                               });
 
                               // fetch available time slots for the selected date
-                              print("selected date: $selectedDay");
                               await appointmentProvider.fetchAvailableTimeSlots(
                                 selectedDay,
                               );
-                            },
-                          ),
 
-                          SizedBox(height: Constants.spaceSmall),
-
-                          // available time slots
-                          if (appointmentProvider.availableTimeSlots.isNotEmpty)
-                            UIDropDown(
-                              items: appointmentProvider.availableTimeSlots,
-                              hintText: "Select a time slot",
-                              onChanged: (String? selectedId) {
-                                setState(() {
-                                  selectedTimeSlot = appointmentProvider
-                                      .availableTimeSlots
-                                      .firstWhere(
-                                        (timeSlot) =>
-                                            timeSlot.uid == selectedId,
-                                      );
-                                });
-                              },
-                              itemText:
-                                  (item) =>
-                                      '${item.startTime} - ${item.endTime} - ${item.period}',
-                              itemValue: (item) => item.uid,
-                              validator: (value) {
-                                if (value == null)
-                                  return "Please select a time slot";
-                                return null;
-                              },
-                            ),
-
-                          SizedBox(height: Constants.spaceSmall),
-
-                          // services
-                          UIDropDown(
-                            items: appointmentProvider.services,
-                            hintText: "Select a service",
-                            onChanged: (String? selectedId) async {
                               setState(() {
-                                selectedService = appointmentProvider.services
-                                    .firstWhere(
-                                      (service) => service.uid == selectedId,
-                                    );
+                                showForm =
+                                    appointmentProvider
+                                            .availableTimeSlots
+                                            .isNotEmpty
+                                        ? true
+                                        : false;
                               });
                             },
-                            itemText: (item) => item.name,
-                            itemValue: (item) => item.uid,
-                            validator: (value) {
-                              if (value == null) {
-                                return "Please select a service";
-                              }
-                              return null;
-                            },
                           ),
 
                           SizedBox(height: Constants.spaceSmall),
 
-                          // notes
-                          UiInputField(
-                            controller: notesController,
-                            labelText: "Notes",
-                            hintText: "Add any special notes here",
-                            keyboardType: TextInputType.multiline,
-                            textInputAction: TextInputAction.newline,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Please enter a note";
-                              }
-                            },
-                          ),
+                          if (showForm)
+                            Column(
+                              children: [
+                                UIDropDown(
+                                  items: appointmentProvider.availableTimeSlots,
+                                  hintText: "Select a time slot",
+                                  onChanged: (String? selectedId) {
+                                    setState(() {
+                                      selectedTimeSlot = appointmentProvider
+                                          .availableTimeSlots
+                                          .firstWhere(
+                                            (timeSlot) =>
+                                                timeSlot.uid == selectedId,
+                                          );
+                                    });
+                                  },
+                                  itemText:
+                                      (item) =>
+                                          '${item.startTime} - ${item.endTime} - ${item.period}',
+                                  itemValue: (item) => item.uid,
+                                  validator: (value) {
+                                    if (value == null)
+                                      return "Please select a time slot";
+                                    return null;
+                                  },
+                                  isDisabled:
+                                      appointmentProvider.getError != null
+                                          ? true
+                                          : false,
+                                ),
 
-                          SizedBox(height: Constants.spaceLarge * 2),
+                                SizedBox(height: Constants.spaceSmall),
 
-                          UIFilledButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                /// reserve appointment
-                                AppointmentRequest payload = AppointmentRequest(
-                                  userId: currentUser!.uid,
-                                  service:
-                                      selectedService != null
-                                          ? selectedService!
-                                          : appointmentProvider.services.first,
-                                  selectedDate: _selectedDay!,
-                                  timeSlot:
-                                      selectedTimeSlot != null
-                                          ? selectedTimeSlot!
-                                          : appointmentProvider
-                                              .availableTimeSlots
-                                              .first,
-                                  status: "Booked",
-                                );
-                                appointmentProvider.reserveAppointment(payload);
-                              }
-                            },
-                            label: "Reserve",
-                            width: double.infinity,
-                          ),
+                                // services
+                                UIDropDown(
+                                  items: appointmentProvider.services,
+                                  hintText: "Select a service",
+                                  onChanged: (String? selectedId) async {
+                                    setState(() {
+                                      selectedService = appointmentProvider
+                                          .services
+                                          .firstWhere(
+                                            (service) =>
+                                                service.uid == selectedId,
+                                          );
+                                    });
+                                  },
+                                  itemText: (item) => item.name,
+                                  itemValue: (item) => item.uid,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Please select a service";
+                                    }
+                                    return null;
+                                  },
+                                  isDisabled: false,
+                                  //isDisabled: selectedTimeSlot != null ? false : true,
+                                ),
+
+                                SizedBox(height: Constants.spaceSmall),
+
+                                // notes
+                                UiInputField(
+                                  controller: notesController,
+                                  labelText: "Notes",
+                                  hintText: "Add any special notes here",
+                                  keyboardType: TextInputType.multiline,
+                                  textInputAction: TextInputAction.newline,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please enter a note";
+                                    }
+                                  },
+                                ),
+
+                                SizedBox(height: Constants.spaceLarge * 2),
+
+                                UIFilledButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      // check if the user select whole day for the painting service
+                                      if (selectedService!.name == "Painting" &&
+                                          selectedTimeSlot!.period !=
+                                              "whole-day") {
+                                        showAlert(
+                                          "Alert",
+                                          "Painting service cannot be booked during the day.\nPlease select whole-day time slot or else select a different date.",
+                                          () {},
+                                        );
+                                        return;
+                                      }
+
+                                      /// reserve appointment
+                                      AppointmentRequest payload =
+                                          AppointmentRequest(
+                                            userId: currentUser!.uid,
+                                            service:
+                                                selectedService != null
+                                                    ? selectedService!
+                                                    : appointmentProvider
+                                                        .services
+                                                        .first,
+                                            selectedDate: _selectedDay!,
+                                            timeSlot:
+                                                selectedTimeSlot != null
+                                                    ? selectedTimeSlot!
+                                                    : appointmentProvider
+                                                        .availableTimeSlots
+                                                        .first,
+                                            status: "Booked",
+                                          );
+                                      appointmentProvider.reserveAppointment(
+                                        payload,
+                                      );
+
+                                      // show success message
+                                      showAlert(
+                                        "Success",
+                                        "Appointment booked successfully",
+                                        () {
+                                          Navigator.pop(context);
+                                        },
+                                      );
+                                    }
+                                  },
+                                  label: "Reserve",
+                                  width: double.infinity,
+                                ),
+                              ],
+                            ),
                         ],
                       );
                     },

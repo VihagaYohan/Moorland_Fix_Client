@@ -5,11 +5,21 @@ abstract class AppointmentException implements Exception {
 }
 
 class EmptyListException extends AppointmentException {
-  EmptyListException(super.message);
+  @override
+  final String message;
+  EmptyListException(this.message): super(message);
+
+  @override
+  String toString() => message;
 }
 
 class AllSlotsBookedException extends AppointmentException {
-  AllSlotsBookedException(super.message);
+  @override
+  final String message;
+  AllSlotsBookedException(this.message) : super(message);
+
+  @override
+  String toString() => message;
 }
 
 class PaintingBookingNotAllowdException extends AppointmentException {

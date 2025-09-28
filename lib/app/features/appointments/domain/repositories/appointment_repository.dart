@@ -4,5 +4,5 @@ import '../entities/_index.dart';
 abstract class AppointmentRepository {
   Future<Result<List<Services>>> allServices();
   Future<Result<void>> reserveAppointment(AppointmentRequest payload);
-  Future<Result<List<TimeSlot>>> getBookingDates(DateTime date);
+  Future<Result<dynamic>> getBookingDates(DateTime date);
 }

@@ -64,7 +64,7 @@ class AppointmentRemoteImpl {
       if (hasRecords == true) {
         // check if the timeslots are filled for the given date
         final snapshots = await appointmentRef.get();
-        if (!snapshots.exists) {
+        if (snapshots.exists) {
           List<dynamic> bookedSlots = snapshots['bookedSlots'];
           if (bookedSlots.length >= 3) {
             Result.failure(
@@ -138,25 +138,28 @@ class AppointmentRemoteImpl {
               "All slots are booked for ${AppFormatter.formatDate(payloadDate)}",
             ),
           );
-        } else if(bookedSlots.length <= 1 && bookedSlots.length <= 3) {
-          for(var slot in bookedSlots) {
-            final bookedSlot = TimeSlotModel.fromJson(slot);
-            for (var timeSlot in allTimeSlots){
-              if(bookedSlot.period != timeSlot.period && timeSlot.period != "whole-day") {
-                availableTimeSlots.add(timeSlot);
-              }
-            }
+        }
+        final Set<String> addedPeriods = {};
+        // loop through booked slots and add periods that are already booked to addedPeriods set
+        for (var slot in bookedSlots) {
+          final bookedSlot = TimeSlotModel.fromJson(slot);
+          addedPeriods.add(bookedSlot.period);
+        }
+
+        // loop through all time slots and add periods that are not already booked to availableTime slots array
+        for (var timeSlot in allTimeSlots) {
+          // skip whole-day period
+          if (timeSlot.period == "whole-day") {
+            continue;
           }
-        } else {
-          for (var slot in bookedSlots) {
-            final bookedSlot = TimeSlotModel.fromJson(slot);
-            for (var timeSlot in allTimeSlots) {
-              if (bookedSlot.period != timeSlot.period) {
-                availableTimeSlots.add(timeSlot);
-              }
-            }
+          if (!addedPeriods.contains(timeSlot.period)) {
+            availableTimeSlots.add(timeSlot);
           }
         }
+
+        // sort the available time slots
+        availableTimeSlots.sort((a, b) => a.startTime.compareTo(b.startTime));
+
         return Result.success(availableTimeSlots);
       } else {
         // if there's no appointment document for the given date, return all default time slots

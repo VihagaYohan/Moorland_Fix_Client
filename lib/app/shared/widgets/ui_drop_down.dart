@@ -18,6 +18,7 @@ class UIDropDown<T> extends StatefulWidget {
   final Widget? icon;
   final bool isExpanded;
   final Color? dropdownColor;
+  final bool? isDisabled;
 
   const UIDropDown({
     super.key,
@@ -33,6 +34,7 @@ class UIDropDown<T> extends StatefulWidget {
     this.icon,
     this.isExpanded = true,
     this.dropdownColor,
+    this.isDisabled
   });
 
   @override
@@ -87,13 +89,13 @@ class _UIDropDownState<T> extends State<UIDropDown<T>> {
                       ),
             );
           }).toList(),
-      onChanged: (String? newValue) {
+      onChanged: widget.isDisabled == false ? (String? newValue) {
         setState(() {
           selectedValue =
               newValue; // No need for ! since selectedValue is nullable
         });
         widget.onChanged(newValue);
-      },
+      } : null,
       validator: widget.validator,
       decoration:
           widget.decoration ??
@@ -123,75 +125,3 @@ class _UIDropDownState<T> extends State<UIDropDown<T>> {
     );
   }
 }
-
-/*class UIDropDown extends StatefulWidget {
-  final List<TimeSlot> timeSlots;
-  final String hintText;
-  final ValueChanged<String?>? onChanged; // Changed to String?
-  final FormFieldValidator<String>? validator; // Changed to String
-
-  const UIDropDown({
-    super.key,
-    required this.timeSlots,
-    this.hintText = 'Select time slot',
-    this.onChanged,
-    this.validator,
-  });
-
-  @override
-  State<UIDropDown> createState() => _UiDropDownState();
-}
-
-class _UiDropDownState extends State<UIDropDown> {
-  String? selectedValue;
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      // Specify String type
-      value: selectedValue,
-      hint: Text(widget.hintText, style: TextStyle(color: Colors.grey[600])),
-      items:
-          widget.timeSlots.map((TimeSlot timeSlot) {
-            return DropdownMenuItem<String>(
-              value: timeSlot.id, // Use the ID as value (String)
-              child: Text(
-                '${timeSlot.startTime} - ${timeSlot.endTime} (${timeSlot.period})',
-                style: const TextStyle(fontSize: 14),
-              ),
-            );
-          }).toList(),
-      onChanged: (String? newValue) {
-        setState(() {
-          selectedValue = newValue;
-        });
-        if (widget.onChanged != null) {
-          widget.onChanged!(newValue); // This will pass String (ID) now
-        }
-      },
-      validator: widget.validator,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.blue),
-        ),
-      ),
-      icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
-      isExpanded: true,
-      dropdownColor: Colors.white,
-      borderRadius: BorderRadius.circular(8),
-    );
-  }
-}*/

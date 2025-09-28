@@ -35,15 +35,18 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
   }
 
   @override
-  Future<Result<List<TimeSlot>>> getBookingDates(DateTime date) async {
+  Future<Result<dynamic>> getBookingDates(DateTime date) async {
     // TODO: implement getBookingDates
     List<TimeSlot> timeSlotList = [];
     Result<List<TimeSlotModel>> result = await dataSource.getAvailableTimeSlots(date);
-    if(result.isSuccess && result.data != null) {
-      for(var slot in result.data!) {
-        timeSlotList.add(slot.toEntity());
+    if(result.isSuccess) {
+      if(result.data!.isNotEmpty) {
+        for(var slot in result.data!) {
+          timeSlotList.add(slot.toEntity());
+        }
+        return Result.success(timeSlotList);
       }
     }
-    return Result.success(timeSlotList);
+    return Result.failure(result.error);
   }
 }

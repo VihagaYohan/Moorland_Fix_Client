@@ -61,6 +61,14 @@ class AppointmentProvider extends ChangeNotifier {
   // add booking
   Future<void> reserveAppointment(AppointmentRequest payload) async {
     _isLoading = true;
+
+    if (payload.service.name == "Painting" && payload.timeSlot != "whole-day") {
+      _isError = true;
+      _error = Exception("Painting service cannot be booked during the day");
+      notifyListeners();
+      return;
+    }
+
     final result = await addBooking.initiate(payload);
     if (result.isSuccess) {
       final message = result.data;
@@ -77,13 +85,20 @@ class AppointmentProvider extends ChangeNotifier {
     _isLoading = true;
 
     final result = await getBookingDates.initiate(date);
-    if (result.isSuccess && result.data != null && result.data!.isNotEmpty) {
+    if(result.isSuccess && result.data != null && result.data!.isNotEmpty) {
       _availableTimeSlots = result.data!;
     } else {
       _isError = true;
       _error = result.error;
     }
+
     _isLoading = false;
+    notifyListeners();
+  }
+
+  void resetState() {
+    _isError = false;
+    _error = null;
     notifyListeners();
   }
 }
