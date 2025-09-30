@@ -38,9 +38,9 @@ class _CompactLayoutState extends State<CompactLayout> {
           ),
 
           NavigationDestination(
-            icon: Icon(Icons.man_2_outlined, color: Colors.grey),
+            icon: Icon(Icons.manage_accounts_outlined, color: Colors.grey),
             label: "Profile",
-            selectedIcon: Icon(Icons.man, color: AppColors.primary),
+            selectedIcon: Icon(Icons.manage_accounts_rounded, color: AppColors.primary),
           ),
         ],
       ),

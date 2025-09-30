@@ -7,11 +7,15 @@ class AppointmentProvider extends ChangeNotifier {
   final AllServices allServices;
   final AddBooking addBooking;
   final GetBookingDates getBookingDates;
+  final AllAppointments allAppointments;
+  final UpdateBooking updateAppointment;
 
   AppointmentProvider({
     required this.allServices,
     required this.addBooking,
     required this.getBookingDates,
+    required this.allAppointments,
+    required this.updateAppointment
   });
 
   // loading
@@ -29,6 +33,10 @@ class AppointmentProvider extends ChangeNotifier {
 
   List<TimeSlot> get availableTimeSlots => _availableTimeSlots;
 
+  // appointments
+  List<Appointment> _appointments = [];
+  List<Appointment> get appointments => _appointments;
+
   // error
   Exception? _error = null;
 
@@ -38,6 +46,10 @@ class AppointmentProvider extends ChangeNotifier {
   bool _isError = false;
 
   bool get isError => _isError;
+
+  // message
+  String? _message = null;
+  String? get message => _message;
 
   // get all services
   Future<void> getServices() async {
@@ -80,6 +92,22 @@ class AppointmentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // update booking
+  Future<void> updateAppointmentBooking(Appointment payload) async {
+    _isLoading = true;
+
+    final result = await updateAppointment.initiate(payload);
+    if(result.isSuccess) {
+        _message = "Appointment updated";
+    } else {
+      _isError = true;
+      _error = result.error;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
   // fetch available time slots for the selected date
   Future<void> fetchAvailableTimeSlots(DateTime date) async {
     _isLoading = true;
@@ -95,6 +123,26 @@ class AppointmentProvider extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  // fetch all appointments
+  Future<void> fetchAllAppointments(String userId, String status) async {
+    _isLoading = true;
+
+    final result = await allAppointments.initiate(userId, status);
+    if(result.isSuccess && result.data != null) {
+      _appointments = result.data!;
+    } else if(result.isSuccess && result.data!.isEmpty) {
+      _isError = true;
+      _error = Exception("No appointments found");
+    } else {
+      _isError = true;
+      _error = result.error;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
 
   void resetState() {
     _isError = false;

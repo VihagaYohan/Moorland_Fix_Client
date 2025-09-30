@@ -49,4 +49,24 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
     }
     return Result.failure(result.error);
   }
+
+  @override
+  Future<Result<List<Appointment>>> allAppointments(String userId, String status) async {
+    // TODO: implement allAppointments
+    List<Appointment> appointmentsList = [];
+    Result<List<AppointmentModel>> result = await dataSource.getAllAppointments(userId, status);
+    if(result.isSuccess && result.data != null) {
+      for(var appointment in result.data!) {
+        appointmentsList.add(appointment.toEntity());
+      }
+    }
+    return Result.success(appointmentsList);
+  }
+
+  @override
+  Future<Result<dynamic>> updateAppointment(Appointment payload) async {
+    // TODO: implement updateAppointmnet
+   Result result = await dataSource.updateAppointment(payload);
+   return result;
+  }
 }

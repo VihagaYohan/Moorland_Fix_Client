@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moorland_fix/app/features/appointments/data/models/_index.dart';
 import 'package:moorland_fix/app/features/appointments/domain/entities/_index.dart';
+
 // shared
 import 'package:moorland_fix/app/shared/index.dart';
 
@@ -32,6 +33,35 @@ class AppointmentRemoteImpl {
     }
   }
 
+  Future<Result<List<AppointmentModel>>> getAllAppointments(
+    String userId,
+    String status,
+  ) async {
+    try {
+      final List<AppointmentModel> appointmentsList = [];
+      final snapshot =
+          await dbInstance.collection(Collections.appointments).get();
+      if (snapshot.docs.isEmpty) {
+        return Result.failure(EmptyListException("No appointments found"));
+      } else {
+        for (var doc in snapshot.docs) {
+          List<dynamic> appointments = doc.data()['appointments'] ?? [];
+          for (var appointment in appointments) {
+            if (appointment['userId'] == userId &&
+                appointment['status'] == status) {
+              appointmentsList.add(AppointmentModel.fromJson(appointment));
+            }
+          }
+        }
+      }
+      return Result.success(appointmentsList);
+    } catch (e) {
+      return Result.failure(
+        Exception("Unknown error at fetching appointments"),
+      );
+    }
+  }
+
   Future<Result<void>> bookService(AppointmentRequest payload) async {
     try {
       // check if there's a appointment document for the same date
@@ -49,6 +79,48 @@ class AppointmentRemoteImpl {
       return Result.failure(
         Exception("Unknown error at booking service ${e.toString()}"),
       );
+    }
+  }
+
+  Future<Result<dynamic>> updateAppointment(Appointment payload) async {
+    try {
+      final appointmentRef = dbInstance
+          .collection(Collections.appointments)
+          .doc(AppFormatter.formatDate(payload.selectedDate));
+
+      final docSnapshot = await appointmentRef.get();
+
+      if (!docSnapshot.exists) {
+        return Result.failure(Exception("Appointment not found"));
+      }
+
+      List<dynamic> appointments = docSnapshot.data()?['appointments'] ?? [];
+
+      // find index of the appointment with matching _id
+      final index = appointments.indexWhere((a) => a['_id'] == payload.uid);
+
+      if (index == -1) {
+        return Result.failure(Exception("Appointment not found"));
+      }
+
+      // update the appointment document
+      final appointment = AppointmentModel(
+        payload.uid,
+        payload.userId,
+        payload.service.toModel(),
+        payload.selectedDate,
+        payload.timeSlot.toModel(),
+        payload.notes,
+        payload.status,
+      );
+
+      appointments[index] = appointment.toJson();
+
+      await appointmentRef.update({'appointments': appointments});
+
+      return Result.success("Appointment updated successfully");
+    } catch (e) {
+      return Result.failure(Exception("Unknown error at updating appointment"));
     }
   }
 
@@ -93,7 +165,8 @@ class AppointmentRemoteImpl {
         payload.service.toModel(),
         payload.selectedDate,
         payload.timeSlot.toModel(),
-        payload.status,
+        payload.notes,
+        payload.status
       );
 
       appointmentRef.set({
@@ -171,46 +244,4 @@ class AppointmentRemoteImpl {
       );
     }
   }
-
-  /*  Future<Result<List<AppointmentDocument>>> getBookingDates(
-    DateTime payloadDate,
-  ) async {
-    try {
-      final List<AppointmentDocument> appointmentsList = [];
-      final appointmentRef = dbInstance.collection(Collections.appointments);
-
-      // start and end date
-      final startDate = DateTime(payloadDate.year, payloadDate.month, 1);
-      final endDate = DateTime(
-        payloadDate.year,
-        payloadDate.month + 1,
-        0,
-      ); // last day of the month
-
-      // format to match with the document id
-      final startKey = AppFormatter.formatDate(startDate);
-      final endKey = AppFormatter.formatDate(endDate);
-
-      // query documents withing the range
-      final snapshot =
-          await appointmentRef
-              .orderBy(FieldPath.documentId)
-              .startAt([startKey])
-              .endAt([endKey])
-              .get();
-
-      for (var doc in snapshot.docs) {
-        final appointmentDocument = AppointmentDocument.fromJson(
-          doc.id,
-          doc.data(),
-        );
-        appointmentsList.add(appointmentDocument);
-      }
-      return Result.success(appointmentsList);
-    } catch (e) {
-      return Result.failure(
-        Exception("Unknown error at fetching booking dates"),
-      );
-    }
-  }*/
 }

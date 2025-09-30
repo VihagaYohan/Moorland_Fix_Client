@@ -6,6 +6,7 @@ class AppointmentRequest {
   Services service;
   DateTime selectedDate;
   TimeSlot timeSlot;
+  String notes;
   String status;
 
   AppointmentRequest({
@@ -13,6 +14,7 @@ class AppointmentRequest {
     required this.service,
     required this.selectedDate,
     required this.timeSlot,
+    required this.notes,
     required this.status,
   });
 }

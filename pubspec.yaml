@@ -53,6 +53,7 @@ dependencies:
   encrypt_shared_preferences: ^0.9.10
   table_calendar: ^3.2.0
   intl: ^0.20.2
+  animated_segmented_tab_control: ^2.0.0
 
 dev_dependencies:
   flutter_test:
