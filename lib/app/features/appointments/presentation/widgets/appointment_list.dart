@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // widgets
 import 'package:moorland_fix/app/features/appointments/presentation/widgets/_index.dart';
+import 'package:moorland_fix/app/features/appointments/presentation/widgets/compact/compact_completed_layout.dart';
 
 class AppointmentList extends StatefulWidget {
   const AppointmentList({super.key});
@@ -26,7 +27,7 @@ class _AppointmentListState extends State<AppointmentList> {
       body: const TabBarView(
         children: [
           Center(child: CompactUpcomingLayout()),
-          Center(child: Text("Completed"))
+          Center(child: CompactCompletedLayout())
         ],
       )
     ));

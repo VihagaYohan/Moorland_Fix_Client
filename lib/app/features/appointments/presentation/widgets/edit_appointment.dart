@@ -9,8 +9,13 @@ import 'package:provider/provider.dart';
 
 class EditAppointment extends StatefulWidget {
   final Appointment appointment;
+  final bool? isCompleted;
 
-  EditAppointment({super.key, required this.appointment});
+  EditAppointment({
+    super.key,
+    required this.appointment,
+    required this.isCompleted,
+  });
 
   // controllers
   final TextEditingController notesController = TextEditingController();
@@ -111,54 +116,61 @@ class _EditAppointmentState extends State<EditAppointment> {
                   hintText: "Add any special notes here",
                   keyboardType: TextInputType.multiline,
                   textInputAction: TextInputAction.newline,
+                  readOnly: widget.isCompleted == true ? true : false,
                 ),
 
                 const SizedBox(height: Constants.spaceMedium),
 
                 // services
-                UIDropDown(
-                  items: Constants.statusList,
-                  hintText: "Select a status",
-                  onChanged: (String? selectedId) {
-                    setState(() {
-                      widget.selectedStatus = Constants.statusList.firstWhere((service) => service.uid == selectedId);
-                    });
-                  },
-                  itemText: (item) => item.name,
-                  itemValue: (item) => item.uid,
-                  validator: (value) {
-                    if (value == null) {
-                      return "Please select a service";
-                    }
-                    return null;
-                  },
-                  isDisabled: false,
-                ),
+                if (widget.isCompleted == false)
+                  UIDropDown(
+                    items: Constants.statusList,
+                    hintText: "Select a status",
+                    onChanged: (String? selectedId) {
+                      setState(() {
+                        widget.selectedStatus = Constants.statusList.firstWhere(
+                          (service) => service.uid == selectedId,
+                        );
+                      });
+                    },
+                    itemText: (item) => item.name,
+                    itemValue: (item) => item.uid,
+                    validator: (value) {
+                      if (value == null) {
+                        return "Please select a service";
+                      }
+                      return null;
+                    },
+                    isDisabled: false,
+                  ),
 
-                UIFilledButton(label: "Save",
-                  onPressed: () async {
-                    // update appointment
-                    Appointment payload = Appointment(
-                      uid: widget.appointment.uid,
-                      userId: widget.appointment.userId,
-                      service: widget.appointment.service,
-                      selectedDate: widget.appointment.selectedDate,
-                      notes: widget.notesController.text,
-                      timeSlot: widget.appointment.timeSlot,
-                      status: widget.selectedStatus!.name,
-                    );
+                if (widget.isCompleted == false)
+                  UIFilledButton(
+                    label: "Save",
+                    onPressed: () async {
+                      // update appointment
+                      Appointment payload = Appointment(
+                        uid: widget.appointment.uid,
+                        userId: widget.appointment.userId,
+                        service: widget.appointment.service,
+                        selectedDate: widget.appointment.selectedDate,
+                        notes: widget.notesController.text,
+                        timeSlot: widget.appointment.timeSlot,
+                        status: widget.selectedStatus!.name,
+                      );
 
-                    appointmentProvider.updateAppointmentBooking(payload);
+                      appointmentProvider.updateAppointmentBooking(payload);
 
-                    // show success message
-                    showAlert(
-                      "Success",
-                      "Appointment updated successfully",
-                      () {
-                        Navigator.pop(context);
-                      },
-                    );
-                  },)
+                      // show success message
+                      showAlert(
+                        "Success",
+                        "Appointment updated successfully",
+                        () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
               ],
             );
           },

@@ -84,6 +84,7 @@ class _CompactUpcomingLayoutState extends State<CompactUpcomingLayout> {
             itemBuilder: (context, index) {
               return AppointmentCard(
                 appointment: appointmentProvider.appointments[index],
+                isCompleted: false,
               );
             },
           );

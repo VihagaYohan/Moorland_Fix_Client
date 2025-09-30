@@ -8,19 +8,19 @@ import 'package:moorland_fix/app/shared/index.dart';
 
 class AppointmentCard extends StatelessWidget {
   final Appointment appointment;
+  final bool? isCompleted;
 
-  const AppointmentCard({super.key, required this.appointment});
+  const AppointmentCard({super.key, required this.appointment, required this.isCompleted});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:
-          () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EditAppointment(appointment: appointment),
-            ),
-          ),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditAppointment(appointment: appointment, isCompleted: isCompleted),
+        ),
+      ),
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(Constants.spaceSmall),
