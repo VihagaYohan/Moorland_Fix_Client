@@ -10,7 +10,7 @@ class TimeSlot {
 
   @override
   String toString() {
-    return "$uid - $startTime - $endTime ($period)";
+    return "$startTime - $endTime ($period)";
   }
 
   TimeSlotModel toModel() {

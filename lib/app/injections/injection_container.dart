@@ -29,7 +29,7 @@ Future<void> init({required FirebaseOptions firebaseOptions}) async {
   );
 
   // initialize firebase
-  getIt<FirebaseService>().initialize();
+  await getIt<FirebaseService>().initialize();
 
   getIt.registerLazySingleton(() => GoogleSignIn.standard());
   // getIt.registerLazySingleton(() => FirebaseServiceImpl(firebaseOptions))
@@ -65,6 +65,8 @@ Future<void> init({required FirebaseOptions firebaseOptions}) async {
       allServices: getIt(),
       addBooking: getIt(),
       getBookingDates: getIt(),
+      allAppointments: getIt(),
+      updateAppointment: getIt(),
     ),
   );
 
@@ -77,4 +79,8 @@ Future<void> init({required FirebaseOptions firebaseOptions}) async {
   getIt.registerLazySingleton(
     () => GetBookingDates(getIt<AppointmentRepository>()),
   );
+  getIt.registerLazySingleton(
+    () => AllAppointments(getIt<AppointmentRepository>()),
+  );
+  getIt.registerLazySingleton(() => UpdateBooking(getIt<AppointmentRepository>()));
 }

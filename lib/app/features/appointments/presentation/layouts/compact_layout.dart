@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moorland_fix/app/features/appointments/presentation/widgets/_index.dart';
 import 'package:moorland_fix/app/features/appointments/presentation/widgets/new_appointment.dart';
 // flavors
 import 'package:moorland_fix/app/flavors/flavor_config.dart';
@@ -16,16 +17,7 @@ class _CompactLayoutState extends State<CompactLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text("Appointment page"),
-            Text('App - ${FlavorConfig.instance.name}'),
-          ],
-        ),
-      ),
+      body: AppointmentList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(

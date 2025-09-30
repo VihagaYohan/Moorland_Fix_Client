@@ -26,26 +26,35 @@ class FirebaseServiceImpl implements FirebaseService {
   // get firebase instance
   @override
   FirebaseApp get appInstance {
-    if (_appInstance != null || _isInitialized) {
+    if (_appInstance != null && _isInitialized) {
+      return _appInstance!;
+    }
+    throw Exception("Firebase not initialized. Call initialize() first.");
+   /* if (_appInstance != null && _isInitialized) {
       return _appInstance!;
     }
     initialize();
-    if(_appInstance != null || _isInitialized) {
+    if(_appInstance != null && _isInitialized) {
       throw Exception("Firebase not initialized");
     }
-    return _appInstance!;
+    return _appInstance!;*/
+
   }
 
   // get firestore instance
   @override
   FirebaseFirestore get firestoreInstance {
-    if(_appInstance != null || _isInitialized) {
+    if (_appInstance != null && _isInitialized) {
+      return FirebaseFirestore.instance;
+    }
+    throw Exception("Firebase not initialized. Call initialize() first.");
+    /*if(_appInstance != null && _isInitialized) {
       return FirebaseFirestore.instance;
     }
     initialize();
-    if(_appInstance != null || _isInitialized) {
+    if(_appInstance != null && _isInitialized) {
       throw Exception("Firebase not initialized");
     }
-    return FirebaseFirestore.instance;
+    return FirebaseFirestore.instance;*/
   }
 }
