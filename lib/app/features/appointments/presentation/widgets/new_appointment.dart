@@ -35,9 +35,7 @@ class _NewAppointmentState extends State<NewAppointment> {
   bool showForm = false;
 
   // controllers
-  final TextEditingController notesController = TextEditingController(
-    text: "note",
-  );
+  final TextEditingController notesController = TextEditingController(text: "");
   final TextEditingController dateController = TextEditingController(text: "");
 
   @override
@@ -262,6 +260,7 @@ class _NewAppointmentState extends State<NewAppointment> {
                                                     : appointmentProvider
                                                         .availableTimeSlots
                                                         .first,
+                                            notes: notesController.text,
                                             status: "Booked",
                                           );
                                       appointmentProvider.reserveAppointment(

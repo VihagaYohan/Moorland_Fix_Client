@@ -9,4 +9,26 @@ class Constants {
 
   // encrypted storage keys
   static const String userKey = "user";
+
+  // appointment status
+  static const String booked = "Booked";
+  static const String cancelled = "Cancelled";
+  static const String completed = "Completed";
+
+  // appointment status list
+  static  List<StatusList> statusList = [
+    StatusList(uid: "1", name: booked),
+    StatusList(uid: "2", name: completed)
+  ];
+
+}
+
+class StatusList {
+  String uid;
+  String name;
+
+  StatusList({
+    required this.uid,
+    required this.name
+});
 }
