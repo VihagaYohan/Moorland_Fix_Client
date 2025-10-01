@@ -3,16 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:moorland_fix/app/features/auth/domain/entities/_index.dart';
 import 'package:moorland_fix/app/features/auth/presentation/provider/auth_provider.dart';
+
 // widget
 import 'package:moorland_fix/app/features/auth/presentation/widgets/index.dart';
 import 'package:moorland_fix/app/features/home/presentation/root_home_page.dart';
+import 'package:moorland_fix/app/shared/index.dart';
 
 // provider
 import 'package:provider/provider.dart';
-
-import '../../../../shared/constants.dart';
-import '../../../../shared/widgets/buttons/ui_filled_button.dart';
-import 'package:moorland_fix/app/shared/index.dart';
 
 class CompactLayout extends StatefulWidget {
   const CompactLayout({super.key});
@@ -29,7 +27,10 @@ class _CompactLayoutState extends State<CompactLayout> {
       // save user details on encrypted storage
       UserEntity userDetails = result.data!;
       final storage = await EncryptStorage.create();
-      await storage.setValue<String>(Constants.userKey, jsonEncode(userDetails));
+      await storage.setValue<String>(
+        Constants.userKey,
+        jsonEncode(userDetails),
+      );
 
       Navigator.push(
         context,
@@ -53,19 +54,49 @@ class _CompactLayoutState extends State<CompactLayout> {
               } else if (authProvider.getError != null) {
                 return Center(child: Text(authProvider.getError.toString()));
               } else {
-                return // sign-in button
-                SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Constants.spaceMedium,
-                    ),
-                    child: UIFilledButton(
-                      label: 'Sign In',
-                      onPressed: () {
-                        handleAuthentication(authProvider, context);
-                      },
-                    ),
+                return SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      // title
+                      Text(
+                        "Moorland Fix",
+                        style: Theme.of(context).textTheme.displayLarge,
+                        textAlign: TextAlign.center,
+                      ),
+
+                      const SizedBox(height: Constants.spaceSmall),
+
+                      // tag line
+                      Text(
+                        "Quick solutions, Trusted experts",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.headlineSmall!.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.grey,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+
+
+                      const SizedBox(height: Constants.spaceLarge * 2),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Constants.spaceMedium,
+                          ),
+                          child: UIFilledButton(
+                            label: 'Sign In',
+                            onPressed: () {
+                              handleAuthentication(authProvider, context);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }

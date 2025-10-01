@@ -49,6 +49,9 @@ class _EditAppointmentState extends State<EditAppointment> {
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.primary
+        )
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
