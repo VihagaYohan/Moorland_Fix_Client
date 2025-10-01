@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return UIResponsiveLayout(
         compactLayout: CompactLayout(),
-        mediumLayout: MediumLayout(),
-        expandedLayout: ExpandedLayout());
+        mediumLayout: CompactLayout(),
+        expandedLayout: CompactLayout());
   }
 }

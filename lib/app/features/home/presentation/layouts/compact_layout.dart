@@ -44,7 +44,7 @@ class _CompactLayoutState extends State<CompactLayout> {
           ),
         ],
       ),
-      body: const [AppointmentsPage(), NewAppointment()][currentPageIndex],
+      body: const [AppointmentsPage(), ProfilePage()][currentPageIndex],
     );
   }
 }

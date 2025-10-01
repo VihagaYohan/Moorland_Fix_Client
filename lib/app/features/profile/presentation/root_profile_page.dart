@@ -18,8 +18,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return UIResponsiveLayout(
       compactLayout: CompactLayout(),
-      mediumLayout: MediumLayout(),
-      expandedLayout: ExpandedLayout(),
+      mediumLayout: CompactLayout(),
+      expandedLayout: CompactLayout(),
     );
   }
 }
