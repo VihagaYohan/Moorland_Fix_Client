@@ -30,11 +30,6 @@ class _CompactLayoutState extends State<CompactLayout> {
         jsonEncode(userDetails),
       );
 
-      /*      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );*/
-
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),

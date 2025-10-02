@@ -59,8 +59,8 @@ class _CompactLayoutState extends State<CompactLayout> {
             const SizedBox(height: Constants.spaceSmall),
             Text("${currentUser?.email}"),
             const SizedBox(height: Constants.spaceSmall),
-            Text("Is Admin : ${currentUser?.isAdmin == true ? "Yes" : "No"}")
-
+            if(currentUser!.isAdmin == true)
+              Text("Is Admin : ${currentUser?.isAdmin == true ? "Yes" : "No"}")
           ]
         )
       ),
