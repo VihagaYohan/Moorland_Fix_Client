@@ -42,7 +42,7 @@ class _CompactUpcomingLayoutState extends State<CompactUpcomingLayout> {
       Provider.of<AppointmentProvider>(
         context,
         listen: false,
-      ).fetchAllAppointments(currentUser!.uid, widget.status);
+      ).fetchAllAppointments(currentUser!.uid, widget.status, currentUser!.isAdmin);
     }
   }
 
