@@ -39,7 +39,10 @@ Future<void> init({required FirebaseOptions firebaseOptions}) async {
   * */
   // auth remote data access implementation
   getIt.registerLazySingleton<AuthRemoteImpl>(
-    () => AuthRemoteImpl(googleSignIn: getIt()),
+    () => AuthRemoteImpl(
+      googleSignIn: getIt(),
+      dbInstance: getIt<FirebaseService>().firestoreInstance,
+    ),
   );
   // appointment remote data access implementation
   getIt.registerLazySingleton<AppointmentRemoteImpl>(
@@ -82,5 +85,7 @@ Future<void> init({required FirebaseOptions firebaseOptions}) async {
   getIt.registerLazySingleton(
     () => AllAppointments(getIt<AppointmentRepository>()),
   );
-  getIt.registerLazySingleton(() => UpdateBooking(getIt<AppointmentRepository>()));
+  getIt.registerLazySingleton(
+    () => UpdateBooking(getIt<AppointmentRepository>()),
+  );
 }

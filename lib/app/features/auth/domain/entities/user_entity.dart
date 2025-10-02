@@ -3,12 +3,14 @@ class UserEntity {
   String name;
   String email;
   String photoUrl;
+  bool isAdmin;
 
   UserEntity({
     required this.uid,
     required this.name,
     required this.email,
     required this.photoUrl,
+    required this.isAdmin
   });
 
   // toJson
@@ -18,6 +20,7 @@ class UserEntity {
       'name': name,
       'email': email,
       'photoUrl': photoUrl,
+      'isAdmin': isAdmin
     };
   }
 
@@ -27,7 +30,8 @@ class UserEntity {
       uid: json['uid'],
       name: json['name'],
       email: json['email'],
-      photoUrl: json['photoUrl']
+      photoUrl: json['photoUrl'],
+      isAdmin: json['isAdmin'] ?? false,
     );
   }
 }
