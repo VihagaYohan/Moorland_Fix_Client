@@ -110,6 +110,8 @@ class AppointmentRemoteImpl {
         payload.service.toModel(),
         payload.selectedDate,
         payload.timeSlot.toModel(),
+        payload.postCode,
+        payload.contactNumber,
         payload.notes,
         payload.status,
       );
@@ -165,6 +167,8 @@ class AppointmentRemoteImpl {
         payload.service.toModel(),
         payload.selectedDate,
         payload.timeSlot.toModel(),
+        payload.postCode,
+        payload.contactNumber,
         payload.notes,
         payload.status
       );

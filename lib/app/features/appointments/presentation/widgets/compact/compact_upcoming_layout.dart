@@ -10,7 +10,8 @@ import '../../../../auth/domain/entities/user_entity.dart';
 import '../appointment_card.dart';
 
 class CompactUpcomingLayout extends StatefulWidget {
-  const CompactUpcomingLayout({super.key});
+  final String status;
+  const CompactUpcomingLayout({super.key, required this.status});
 
   @override
   State<CompactUpcomingLayout> createState() => _CompactUpcomingLayoutState();
@@ -19,7 +20,6 @@ class CompactUpcomingLayout extends StatefulWidget {
 class _CompactUpcomingLayoutState extends State<CompactUpcomingLayout> {
   // states
   UserEntity? currentUser;
-  String status = "Booked";
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _CompactUpcomingLayoutState extends State<CompactUpcomingLayout> {
       Provider.of<AppointmentProvider>(
         context,
         listen: false,
-      ).fetchAllAppointments(currentUser!.uid, status);
+      ).fetchAllAppointments(currentUser!.uid, widget.status);
     }
   }
 
@@ -77,6 +77,8 @@ class _CompactUpcomingLayoutState extends State<CompactUpcomingLayout> {
                 });
               }
             }
+          } else if(appointmentProvider.appointments.isEmpty) {
+            return Center(child: Text("No appointments found"));
           }
 
           return ListView.builder(

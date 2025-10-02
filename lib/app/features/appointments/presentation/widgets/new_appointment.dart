@@ -37,6 +37,12 @@ class _NewAppointmentState extends State<NewAppointment> {
   // controllers
   final TextEditingController notesController = TextEditingController(text: "");
   final TextEditingController dateController = TextEditingController(text: "");
+  final TextEditingController postCodeController = TextEditingController(
+    text: "",
+  );
+  final TextEditingController contactNumberController = TextEditingController(
+    text: "",
+  );
 
   @override
   void initState() {
@@ -212,6 +218,38 @@ class _NewAppointmentState extends State<NewAppointment> {
 
                                 SizedBox(height: Constants.spaceSmall),
 
+                                // postal code
+                                UiInputField(
+                                  controller: postCodeController,
+                                  labelText: "Postal code",
+                                  hintText: "Add post code",
+                                  keyboardType: TextInputType.none,
+                                  textInputAction: TextInputAction.next,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please enter postal code";
+                                    }
+                                  },
+                                ),
+
+                                SizedBox(height: Constants.spaceSmall),
+
+                                // contact number
+                                UiInputField(
+                                  controller: contactNumberController,
+                                  labelText: "Contact number",
+                                  hintText: "Add contact number here",
+                                  keyboardType: TextInputType.phone,
+                                  textInputAction: TextInputAction.next,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please enter contact number";
+                                    }
+                                  },
+                                ),
+
+                                SizedBox(height: Constants.spaceSmall),
+
                                 // notes
                                 UiInputField(
                                   controller: notesController,
@@ -219,11 +257,6 @@ class _NewAppointmentState extends State<NewAppointment> {
                                   hintText: "Add any special notes here",
                                   keyboardType: TextInputType.multiline,
                                   textInputAction: TextInputAction.newline,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Please enter a note";
-                                    }
-                                  },
                                 ),
 
                                 SizedBox(height: Constants.spaceLarge * 2),
@@ -260,8 +293,12 @@ class _NewAppointmentState extends State<NewAppointment> {
                                                     : appointmentProvider
                                                         .availableTimeSlots
                                                         .first,
+                                            postCode: postCodeController.text,
+                                            contactNumber:
+                                                contactNumberController.text,
                                             notes: notesController.text,
-                                            status: "Booked",
+                                            status:
+                                                Constants.statusList[3].name,
                                           );
                                       appointmentProvider.reserveAppointment(
                                         payload,
