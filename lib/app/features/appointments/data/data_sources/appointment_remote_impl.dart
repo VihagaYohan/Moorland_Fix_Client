@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moorland_fix/app/features/appointments/data/models/_index.dart';
 import 'package:moorland_fix/app/features/appointments/domain/entities/_index.dart';
-
 // shared
 import 'package:moorland_fix/app/shared/index.dart';
 
@@ -35,8 +34,9 @@ class AppointmentRemoteImpl {
 
   Future<Result<List<AppointmentModel>>> getAllAppointments(
     String userId,
-    String status,
-  ) async {
+    String status, [
+    bool isAdmin = false,
+  ]) async {
     try {
       final List<AppointmentModel> appointmentsList = [];
       final snapshot =
@@ -47,9 +47,15 @@ class AppointmentRemoteImpl {
         for (var doc in snapshot.docs) {
           List<dynamic> appointments = doc.data()['appointments'] ?? [];
           for (var appointment in appointments) {
-            if (appointment['userId'] == userId &&
-                appointment['status'] == status) {
-              appointmentsList.add(AppointmentModel.fromJson(appointment));
+            if (isAdmin) {
+              if (appointment['status'] == status) {
+                appointmentsList.add(AppointmentModel.fromJson(appointment));
+              }
+            } else {
+              if (appointment['userId'] == userId &&
+                  appointment['status'] == status) {
+                appointmentsList.add(AppointmentModel.fromJson(appointment));
+              }
             }
           }
         }
@@ -170,7 +176,7 @@ class AppointmentRemoteImpl {
         payload.postCode,
         payload.contactNumber,
         payload.notes,
-        payload.status
+        payload.status,
       );
 
       appointmentRef.set({

@@ -10,7 +10,7 @@ class AllAppointments {
 
   AllAppointments(this._repository);
 
-  Future<Result<List<Appointment>>> initiate(String userId, String status) async {
-    return _repository.allAppointments(userId, status);
+  Future<Result<List<Appointment>>> initiate(String userId, String status, [bool isAdmin = false]) async {
+    return _repository.allAppointments(userId, status, isAdmin);
   }
 }

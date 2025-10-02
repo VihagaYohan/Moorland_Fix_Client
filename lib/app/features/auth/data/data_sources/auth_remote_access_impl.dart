@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:moorland_fix/app/features/auth/data/data_sources/data_source.dart';
 // shared
@@ -10,8 +11,9 @@ import '../models/user_model.dart';
 
 class AuthRemoteImpl implements DataSource {
   final GoogleSignIn _googleSignIn;
+  FirebaseFirestore dbInstance;
 
-  AuthRemoteImpl({GoogleSignIn? googleSignIn})
+  AuthRemoteImpl({GoogleSignIn? googleSignIn, required this.dbInstance})
     : _googleSignIn = googleSignIn ?? GoogleSignIn();
 
   @override
@@ -21,12 +23,27 @@ class AuthRemoteImpl implements DataSource {
       if (googleUser == null) {
         return Result.failure(SignInException("Sign in cancelled"));
       }
+
+      final String email = googleUser.email;
+
+      // check firestore admins collections for this email
+      final QuerySnapshot snapshot = await dbInstance.collection(Collections.admins)
+      .where('email', isEqualTo: email)
+      .get();
+
+      if(snapshot.docs.isNotEmpty) {
+        // email found in admins collection
+        final storage = await EncryptStorage.create();
+        await storage.setValue<bool>(Constants.isAdminKey, true);
+      }
+
       return Result.success(
         UserModel(
           uid: googleUser.id,
           name: googleUser.displayName ?? "",
           email: googleUser.email,
           photoUrl: googleUser.photoUrl ?? "",
+          isAdmin: snapshot.docs.isNotEmpty,
         ),
       );
     } catch (e) {

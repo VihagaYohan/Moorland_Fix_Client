@@ -9,6 +9,7 @@ class Constants {
 
   // encrypted storage keys
   static const String userKey = "user";
+  static const String isAdminKey = "isAdmin";
 
   // appointment status
   static const String booked = "Booked";

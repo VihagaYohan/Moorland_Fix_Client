@@ -5,15 +5,17 @@ class UserModel {
   String name;
   String email;
   String photoUrl;
+  bool isAdmin;
 
   UserModel({
     required this.uid,
     required this.name,
     required this.email,
     required this.photoUrl,
+    required this.isAdmin
   });
 
   UserEntity toEntity() {
-    return UserEntity(uid: uid, name: name, email: email, photoUrl: photoUrl);
+    return UserEntity(uid: uid, name: name, email: email, photoUrl: photoUrl, isAdmin: isAdmin);
   }
 }

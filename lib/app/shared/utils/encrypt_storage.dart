@@ -16,12 +16,20 @@ class EncryptStorage {
     if(T == String) {
       await sharedPreference.setString(key, payload as String);
     }
+
+    if(T == bool) {
+      await sharedPreference.setBool(key, payload as bool);
+    }
   }
 
   // get value
   Future<T?> getValue<T>(String key) async {
     if(T == String) {
       return sharedPreference.getString(key) as T;
+    }
+
+    if(T == bool) {
+      return sharedPreference.getBool(key) as T;
     }
   }
 }

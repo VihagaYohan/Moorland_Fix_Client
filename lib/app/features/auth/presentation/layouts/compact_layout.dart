@@ -3,12 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:moorland_fix/app/features/auth/domain/entities/_index.dart';
 import 'package:moorland_fix/app/features/auth/presentation/provider/auth_provider.dart';
-
 // widget
 import 'package:moorland_fix/app/features/auth/presentation/widgets/index.dart';
 import 'package:moorland_fix/app/features/home/presentation/root_home_page.dart';
 import 'package:moorland_fix/app/shared/index.dart';
-
 // provider
 import 'package:provider/provider.dart';
 
@@ -32,9 +30,10 @@ class _CompactLayoutState extends State<CompactLayout> {
         jsonEncode(userDetails),
       );
 
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
+        (Route<dynamic> route) => false, // remove all previous routes
       );
     } else {
       print(result.error);
@@ -78,7 +77,6 @@ class _CompactLayoutState extends State<CompactLayout> {
                           letterSpacing: 1.5,
                         ),
                       ),
-
 
                       const SizedBox(height: Constants.spaceLarge * 2),
 
