@@ -14,11 +14,14 @@ class Constants {
   static const String booked = "Booked";
   static const String cancelled = "Cancelled";
   static const String completed = "Completed";
+  static const String pending = "Pending";
 
   // appointment status list
   static  List<StatusList> statusList = [
     StatusList(uid: "1", name: booked),
-    StatusList(uid: "2", name: completed)
+    StatusList(uid: "2", name: completed),
+    StatusList(uid: "3", name: cancelled),
+    StatusList(uid: "4", name: pending)
   ];
 
 }

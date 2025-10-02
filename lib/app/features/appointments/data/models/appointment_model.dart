@@ -10,6 +10,8 @@ class AppointmentModel {
   final ServiceModel service;
   final DateTime selectedDate;
   final TimeSlotModel timeSlot;
+  final String postCode;
+  final String contactNumber;
   final String notes;
   final String status;
 
@@ -19,6 +21,8 @@ class AppointmentModel {
     this.service,
     this.selectedDate,
     this.timeSlot,
+    this.postCode,
+    this.contactNumber,
     this.notes,
     this.status,
   );
@@ -30,6 +34,8 @@ class AppointmentModel {
       'service': service.toJson(),
       'selectedDate': Timestamp.fromDate(selectedDate),
       'timeSlot': timeSlot.toJson(),
+      'postCode': postCode,
+      'contactNumber': contactNumber,
       'notes': notes,
       'status': status,
     };
@@ -45,6 +51,8 @@ class AppointmentModel {
           ? ts.toDate()
           : (ts is String ? DateTime.parse(ts) : DateTime.now()),
       TimeSlotModel.fromJson(json['timeSlot']),
+      json['postCode'],
+      json['contactNumber'],
       json['notes'],
       json['status'],
     );
@@ -57,6 +65,8 @@ class AppointmentModel {
       service: service.toEntity(),
       selectedDate: selectedDate,
       timeSlot: timeSlot.toEntity(),
+      postCode: postCode,
+      contactNumber: contactNumber,
       notes: notes,
       status: status,
     );

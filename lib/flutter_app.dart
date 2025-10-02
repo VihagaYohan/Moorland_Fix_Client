@@ -65,6 +65,7 @@ class _MoorlandAppState extends State<MoorlandApp> {
         title: "Moorland Fix",
         theme: lightTheme,
         darkTheme: darkTheme,
+        debugShowCheckedModeBanner: false,
         routes: AppNavigator.routes,
         home: _userLoggedIn == true ? const HomePage() : const LoginPage(),
       ),

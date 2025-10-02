@@ -15,6 +15,16 @@ class AppColors {
   ); // Slightly darker beige
   static const Color darkSecondary = Color(0xFFE59A65); // Warm orange accent
 
+/*// Burgundy / Maroon primary palette - Light mode
+  static const Color primary = Color(0xFF420D23); // Deep maroon (base)
+  static const Color primaryVariant1 = Color(0xFF5E1A3A); // Slightly lighter, warmer maroon
+  static const Color secondary = Color(0xFFB84E65); // Accent rose/pinkish red
+
+// Burgundy / Maroon primary palette - Dark mode
+  static const Color darkPrimary = Color(0xFFE0C6CF); // Light desaturated pink-beige (for text on dark bg)
+  static const Color darkPrimaryVariant1 = Color(0xFFC59AA9); // Slightly darker muted pink
+  static const Color darkSecondary = Color(0xFFDA7A8F); // Warm rosy accent*/
+
   // Light theme neutrals
   static const Color lightBackground = Color(0xFFF5F2EF);
   static const Color lightSurface = Colors.white;
