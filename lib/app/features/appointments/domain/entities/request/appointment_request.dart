@@ -6,6 +6,8 @@ class AppointmentRequest {
   Services service;
   DateTime selectedDate;
   TimeSlot timeSlot;
+  String postCode;
+  String contactNumber;
   String notes;
   String status;
 
@@ -14,6 +16,8 @@ class AppointmentRequest {
     required this.service,
     required this.selectedDate,
     required this.timeSlot,
+    required this.postCode,
+    required this.contactNumber,
     required this.notes,
     required this.status,
   });

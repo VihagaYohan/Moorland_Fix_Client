@@ -39,6 +39,24 @@ class _EditAppointmentState extends State<EditAppointment> {
     DeviceUtils.showAlertDialog(context, title, message, "OK", onPressed());
   }
 
+  List<StatusList> getFilteredStatusList() {
+    if (widget.appointment.status == Constants.statusList[3].name) {
+      // pending -> allow only cancelled
+      return Constants.statusList
+          .where((status) => status.name == Constants.statusList[2].name)
+          .toList();
+    } else if (widget.appointment.status == Constants.statusList[0].name) {
+      // booked -> exclude pending
+      return Constants.statusList
+          .where((status) => status.name == Constants.statusList[2].name || status.name == Constants.statusList[3].name)
+          .toList();
+    } else {
+      // completed / cancelled -> return all
+      return Constants.statusList;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,9 +67,7 @@ class _EditAppointmentState extends State<EditAppointment> {
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
-        iconTheme: IconThemeData(
-          color: Theme.of(context).colorScheme.primary
-        )
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -127,7 +143,7 @@ class _EditAppointmentState extends State<EditAppointment> {
                 // services
                 if (widget.isCompleted == false)
                   UIDropDown(
-                    items: Constants.statusList,
+                    items: getFilteredStatusList(),
                     hintText: "Select a status",
                     onChanged: (String? selectedId) {
                       setState(() {
@@ -157,6 +173,8 @@ class _EditAppointmentState extends State<EditAppointment> {
                         userId: widget.appointment.userId,
                         service: widget.appointment.service,
                         selectedDate: widget.appointment.selectedDate,
+                        postCode: widget.appointment.postCode,
+                        contactNumber: widget.appointment.contactNumber,
                         notes: widget.notesController.text,
                         timeSlot: widget.appointment.timeSlot,
                         status: widget.selectedStatus!.name,
