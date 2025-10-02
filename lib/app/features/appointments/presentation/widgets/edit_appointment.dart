@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:moorland_fix/app/features/appointments/domain/entities/_index.dart';
 // provider
 import 'package:moorland_fix/app/features/appointments/presentation/provider/appointments_provider.dart';
+import 'package:moorland_fix/app/features/auth/domain/entities/_index.dart';
 // shared
 import 'package:moorland_fix/app/shared/index.dart';
+import 'package:moorland_fix/app/shared/services/index.dart';
 import 'package:provider/provider.dart';
 
 class EditAppointment extends StatefulWidget {
   final Appointment appointment;
   final bool? isCompleted;
+  UserEntity? currentUser;
 
   EditAppointment({
     super.key,
@@ -19,6 +22,8 @@ class EditAppointment extends StatefulWidget {
 
   // controllers
   final TextEditingController notesController = TextEditingController();
+  final TextEditingController postCodeController = TextEditingController();
+  final TextEditingController contactNumberController = TextEditingController();
 
   // states
   late StatusList? selectedStatus;
@@ -32,30 +37,56 @@ class _EditAppointmentState extends State<EditAppointment> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getUserProfile();
     widget.notesController.text = widget.appointment.notes ?? "";
+    widget.postCodeController.text = widget.appointment.postCode ?? "";
+    widget.contactNumberController.text =
+        widget.appointment.contactNumber ?? "";
   }
 
   void showAlert(String title, String message, Function() onPressed) {
     DeviceUtils.showAlertDialog(context, title, message, "OK", onPressed());
   }
 
+  void getUserProfile() async {
+    final userProfile = UserProfile();
+    UserEntity? userEntity = await userProfile.getUserProfile();
+    setState(() {
+      widget.currentUser = userEntity;
+    });
+  }
+
   List<StatusList> getFilteredStatusList() {
     if (widget.appointment.status == Constants.statusList[3].name) {
-      // pending -> allow only cancelled
-      return Constants.statusList
-          .where((status) => status.name == Constants.statusList[2].name)
-          .toList();
+      if (widget.currentUser!.isAdmin) {
+        // if isAdmin -> allow cancelled & booked
+        return Constants.statusList
+            .where(
+              (status) =>
+                  status.name == Constants.statusList[2].name ||
+                  status.name == Constants.statusList[0].name,
+            )
+            .toList();
+      } else {
+        // pending -> allow only cancelled
+        return Constants.statusList
+            .where((status) => status.name == Constants.statusList[2].name)
+            .toList();
+      }
     } else if (widget.appointment.status == Constants.statusList[0].name) {
-      // booked -> exclude pending
+      // booked -> allow cancelled and completed
       return Constants.statusList
-          .where((status) => status.name == Constants.statusList[2].name || status.name == Constants.statusList[3].name)
+          .where(
+            (status) =>
+                status.name == Constants.statusList[1].name ||
+                status.name == Constants.statusList[2].name,
+          )
           .toList();
     } else {
       // completed / cancelled -> return all
       return Constants.statusList;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -128,15 +159,57 @@ class _EditAppointmentState extends State<EditAppointment> {
 
                 const SizedBox(height: Constants.spaceMedium),
 
-                // notes
-                UiInputField(
-                  controller: widget.notesController,
-                  labelText: "Notes",
-                  hintText: "Add any special notes here",
-                  keyboardType: TextInputType.multiline,
-                  textInputAction: TextInputAction.newline,
-                  readOnly: widget.isCompleted == true ? true : false,
-                ),
+                // post code
+                if (widget.currentUser!.isAdmin == true)
+                  itemRow("Postal code", widget.appointment.postCode, context),
+
+                if (widget.currentUser!.isAdmin == false)
+                  UiInputField(
+                    controller: widget.postCodeController,
+                    labelText: "Postal code",
+                    hintText: "Add postal code here",
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    readOnly: widget.isCompleted == true ? true : false,
+                  ),
+
+                const SizedBox(height: Constants.spaceMedium),
+
+                // contact number
+                if (widget.currentUser!.isAdmin == true)
+                  itemRow(
+                    "Contact number",
+                    widget.contactNumberController.text,
+                    context,
+                  ),
+
+                if (widget.currentUser!.isAdmin == false)
+                  UiInputField(
+                    controller: widget.contactNumberController,
+                    labelText: "Contact number",
+                    hintText: "Add contact number here",
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    readOnly: widget.isCompleted == true ? true : false,
+                  ),
+
+                const SizedBox(height: Constants.spaceMedium),
+
+                // notes input field
+                if (widget.currentUser!.isAdmin == false)
+                  UiInputField(
+                    controller: widget.notesController,
+                    labelText: "Notes",
+                    hintText: "Add any special notes here",
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    readOnly: widget.isCompleted == true ? true : false,
+                  ),
+
+                // notes read only fields
+                if (widget.currentUser!.isAdmin == true &&
+                    widget.notesController.text.isNotEmpty)
+                  itemColumn("Notes", widget.notesController.text, context),
 
                 const SizedBox(height: Constants.spaceMedium),
 
@@ -224,6 +297,31 @@ class _EditAppointmentState extends State<EditAppointment> {
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
             fontWeight: FontWeight.bold,
             color: color ?? Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget itemColumn(String title, String value, BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          title,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w400),
+        ),
+
+        const SizedBox(height: Constants.spaceSmall),
+
+        Text(
+          value,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
       ],

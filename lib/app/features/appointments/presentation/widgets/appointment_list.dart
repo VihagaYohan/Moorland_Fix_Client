@@ -7,6 +7,9 @@ import 'package:moorland_fix/app/features/appointments/presentation/widgets/comp
 // shared
 import 'package:moorland_fix/app/shared/index.dart';
 
+// theme
+import 'package:moorland_fix/app/theme/index.dart';
+
 class AppointmentList extends StatefulWidget {
   const AppointmentList({super.key});
 
@@ -21,6 +24,8 @@ class _AppointmentListState extends State<AppointmentList> {
     child: Scaffold(
       appBar: AppBar(
         bottom: const TabBar(
+          labelColor: AppColors.primary,
+          unselectedLabelColor: Colors.grey,
           tabs: [
             Tab(icon: Icon(Icons.pending), text: "Pending"),
             Tab(icon: Icon(Icons.schedule), text: "Upcoming"),

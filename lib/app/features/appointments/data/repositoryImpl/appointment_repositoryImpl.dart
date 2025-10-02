@@ -51,10 +51,10 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
   }
 
   @override
-  Future<Result<List<Appointment>>> allAppointments(String userId, String status) async {
+  Future<Result<List<Appointment>>> allAppointments(String userId, String status, [bool isAdmin = false]) async {
     // TODO: implement allAppointments
     List<Appointment> appointmentsList = [];
-    Result<List<AppointmentModel>> result = await dataSource.getAllAppointments(userId, status);
+    Result<List<AppointmentModel>> result = await dataSource.getAllAppointments(userId, status, isAdmin);
     if(result.isSuccess && result.data != null) {
       for(var appointment in result.data!) {
         appointmentsList.add(appointment.toEntity());

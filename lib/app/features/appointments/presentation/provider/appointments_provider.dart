@@ -125,10 +125,10 @@ class AppointmentProvider extends ChangeNotifier {
   }
 
   // fetch all appointments
-  Future<void> fetchAllAppointments(String userId, String status) async {
+  Future<void> fetchAllAppointments(String userId, String status, [bool isAdmin = false]) async {
     _isLoading = true;
 
-    final result = await allAppointments.initiate(userId, status);
+    final result = await allAppointments.initiate(userId, status, isAdmin);
     if(result.isSuccess && result.data != null) {
       _appointments = result.data!;
     } else if(result.isSuccess && result.data!.isEmpty) {
