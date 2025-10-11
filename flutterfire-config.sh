@@ -22,9 +22,9 @@ case $1 in
       flutterfire config \
         --project=moorlandfix-prod \
         --out=lib/app/env/firebase/firebase_options_prod.dart \
-        --ios-bundle-id=com.moorland.moorlandfix.prod \
+        --ios-bundle-id=com.moorland.moorlandfix \
         --ios-out=ios/flavors/prod/GoogleService-Info.plist \
-        --android-package-name=com.moorland.moorlandfix.prod \
+        --android-package-name=com.moorland.moorlandfix \
         --android-out=android/app/src/prod/google-services.json
   *)
     echo "Error: Invalid environment specified. Use 'dev', or 'prod'."
