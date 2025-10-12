@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Brown primary palette - Light mode
+/*  // Brown primary palette - Light mode
   static const Color primary = Color(0xFF8B5E3C);
   static const Color primaryVariant1 = Color(0xFFA97457);
   static const Color secondary = Color(0xFFDB7134);
@@ -13,9 +13,9 @@ class AppColors {
   static const Color darkPrimaryVariant1 = Color(
     0xFFB99877,
   ); // Slightly darker beige
-  static const Color darkSecondary = Color(0xFFE59A65); // Warm orange accent
+  static const Color darkSecondary = Color(0xFFE59A65); // Warm orange accent*/
 
-/*// Burgundy / Maroon primary palette - Light mode
+// Burgundy / Maroon primary palette - Light mode
   static const Color primary = Color(0xFF420D23); // Deep maroon (base)
   static const Color primaryVariant1 = Color(0xFF5E1A3A); // Slightly lighter, warmer maroon
   static const Color secondary = Color(0xFFB84E65); // Accent rose/pinkish red
@@ -23,7 +23,7 @@ class AppColors {
 // Burgundy / Maroon primary palette - Dark mode
   static const Color darkPrimary = Color(0xFFE0C6CF); // Light desaturated pink-beige (for text on dark bg)
   static const Color darkPrimaryVariant1 = Color(0xFFC59AA9); // Slightly darker muted pink
-  static const Color darkSecondary = Color(0xFFDA7A8F); // Warm rosy accent*/
+  static const Color darkSecondary = Color(0xFFDA7A8F); // Warm rosy accent
 
   // Light theme neutrals
   static const Color lightBackground = Color(0xFFF5F2EF);
@@ -32,8 +32,8 @@ class AppColors {
   static const Color lightTextSecondary = Color(0xFF6B6B6B);
 
   // Dark theme neutrals
-  static const Color darkBackground = Color(0xFF1E1B18);
-  static const Color darkSurface = Color(0xFF2C2C2C);
+  static const Color darkBackground = Color(0xFF12070D); //Color(0xFF1E1B18);
+  static const Color darkSurface =  Color(0xFF1A0E13);//Color(0xFF2C2C2C);
   static const Color darkTextPrimary = Color(0xFFF5F2EF);
   static const Color darkTextSecondary = Color(0xFFB0AAA6);
 

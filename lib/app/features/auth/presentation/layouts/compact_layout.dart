@@ -7,6 +7,7 @@ import 'package:moorland_fix/app/features/auth/presentation/provider/auth_provid
 import 'package:moorland_fix/app/features/auth/presentation/widgets/index.dart';
 import 'package:moorland_fix/app/features/home/presentation/root_home_page.dart';
 import 'package:moorland_fix/app/shared/index.dart';
+import 'package:moorland_fix/app/theme/app_colors.dart';
 // provider
 import 'package:provider/provider.dart';
 
@@ -18,8 +19,19 @@ class CompactLayout extends StatefulWidget {
 }
 
 class _CompactLayoutState extends State<CompactLayout> {
+  bool isLoading = false;
+
   // handle authentication
   handleAuthentication(AuthProvider authProvider, BuildContext context) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    // show alert
+    void showAlert(String title, String message, Function() onPressed) {
+      DeviceUtils.showAlertDialog(context, title, message, "OK", onPressed());
+    }
+
     var result = await authProvider.signInWithGoogle();
     if (result.isSuccess) {
       // save user details on encrypted storage
@@ -36,7 +48,12 @@ class _CompactLayoutState extends State<CompactLayout> {
         (Route<dynamic> route) => false, // remove all previous routes
       );
     } else {
-      print(result.error);
+      setState(() {
+        isLoading = false;
+      });
+      showAlert("Failed", "Something went wrong", () {
+        print(result.error);
+      });
     }
   }
 
@@ -80,20 +97,40 @@ class _CompactLayoutState extends State<CompactLayout> {
 
                       const SizedBox(height: Constants.spaceLarge * 2),
 
-                      SizedBox(
-                        width: double.infinity,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Constants.spaceMedium,
-                          ),
-                          child: UIFilledButton(
-                            label: 'Sign In',
-                            onPressed: () {
-                              handleAuthentication(authProvider, context);
-                            },
+                      if (isLoading == false)
+                        SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Constants.spaceMedium,
+                            ),
+                            child: UIFilledButton(
+                              label: 'Sign In',
+                              onPressed: () {
+                                handleAuthentication(authProvider, context);
+                              },
+                            ),
                           ),
                         ),
-                      ),
+
+                      if (isLoading == true)
+                        SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Constants.spaceMedium,
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Signing in...",
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 );

@@ -19,8 +19,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.moorland.moorland_fix"
-    compileSdk = 34  //flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 35  //flutter.compileSdkVersion
+    ndkVersion =  "27.0.12077973" //flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -37,7 +37,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 24//flutter.minSdkVersion // flutter.minSdkVersion
-        targetSdk = 34 //flutter.targetSdkVersion
+        targetSdk = 35 //flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }

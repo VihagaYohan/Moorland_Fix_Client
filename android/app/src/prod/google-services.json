@@ -12,7 +12,20 @@
           "package_name": "com.moorland.moorlandfix"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "673925541585-hhfj46okmqlmr77h3gj25r2g2pmhaeb9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moorland.moorlandfix",
+            "certificate_hash": "219f3db418ef51e994d45764aae0d1e23df0fa56"
+          }
+        },
+        {
+          "client_id": "673925541585-ltrrrr3eb8ogaaoansboeqooid888v4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDYEzVxW1Rm3saK4ZDGwgJ4K7bUAXNZAlY"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "673925541585-ltrrrr3eb8ogaaoansboeqooid888v4l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "673925541585-sfvoeo608lumfl3bi6on3jth5dk66uif.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.moorland.moorlandfix"
+              }
+            }
+          ]
         }
       }
     }

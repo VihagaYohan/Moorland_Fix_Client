@@ -90,6 +90,7 @@ class _NewAppointmentState extends State<NewAppointment> {
           ),
           child: Column(
             children: <Widget>[
+/*
               // title
               Center(
                 child: Text(
@@ -101,6 +102,7 @@ class _NewAppointmentState extends State<NewAppointment> {
                   textAlign: TextAlign.center,
                 ),
               ),
+*/
 
               // form container
               Form(
